@@ -4,7 +4,7 @@ import copier
 
 root = r"C:\Users\Adam\PythonProjects\adventOfCode\2022"
 
-COMPLETE = True
+COMPLETE = False
 year, day = [2022, 1]
 
 with open(r"C:\Users\Adam\PythonProjects\adventOfCode\2022\day1\input.txt", 'r') as f:
