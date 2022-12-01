@@ -12,7 +12,8 @@ with open(r"2021\day7\input.txt", 'r') as f:
 def get_dist(num, nums):
     total = 0
     for (key, val) in nums.items():
-        total += abs(key-num) * val
+        n = abs(key-num)
+        total += (n * (n + 1) // 2) * val
     
     return total
 
@@ -22,7 +23,7 @@ for num in nums:
     num_tots[num] = nums.count(num)
 
 best = float('inf')
-for num in num_tots.keys():
+for num in range(min(nums), max(nums)+1):
     cur_dist = get_dist(num, num_tots)
     if cur_dist < best:
         best = cur_dist
@@ -30,10 +31,6 @@ for num in num_tots.keys():
 answer = best
 
 if COMPLETE:
-    r = submit(answer, year=year, day=day)
-    soup = bs4.BeautifulSoup(r.text, "html.parser")
-    message = soup.article.text
-    if "That's the right answer" in message:
-        copier.make_next()
+    submit(answer, year=year, day=day)
 else:
     print(answer)
