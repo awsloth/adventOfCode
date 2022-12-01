@@ -1,23 +1,26 @@
 from aocd import submit
 import bs4
 import copier
+import math
 
 COMPLETE = False
-year, day = [2022, 1]
+year, day = [2021, 7]
 
-with open(r"2022\day1\input.txt", 'r') as f:
+with open(r"2021\day7\input.txt", 'r') as f:
     inp = [line.strip() for line in f.readlines()]
 
-runningTotal = 0
-totals = []
-for line in inp:
-    if line == '':
-        totals.append(runningTotal)
-        runningTotal = 0
-    else:
-        runningTotal += int(line)
+inp = ["16,1,2,0,4,2,7,1,2,14"]
 
-answer = max(totals)
+nums = [*map(int, inp[0].split(","))]
+num_tots = {}
+for num in nums:
+    num_tots[num] = nums.count(num)
+
+mean = sum(nums)/len(nums)
+
+answer = 0
+for num in num_tots.keys():
+    ...
 
 if COMPLETE:
     r = submit(answer, year=year, day=day)

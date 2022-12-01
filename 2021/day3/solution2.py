@@ -2,12 +2,10 @@ from aocd import submit
 import bs4
 import copier
 
-root = r"C:\Users\Adam\PythonProjects\adventOfCode\2021"
-
 COMPLETE = True
 year, day = [2021, 3]
 
-with open(r"C:\Users\Adam\PythonProjects\adventOfCode\2021\day3\input.txt", 'r') as f:
+with open(r"2021\day3\input.txt", 'r') as f:
     inp = [line.strip() for line in f.readlines()]
 
 def findSat(condition, inputs):

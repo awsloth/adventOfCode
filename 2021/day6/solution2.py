@@ -2,12 +2,10 @@ from aocd import submit
 import bs4
 import copier
 
-root = r"C:\Users\Adam\PythonProjects\adventOfCode\2021"
-
 COMPLETE = True
 year, day = [2021, 6]
 
-with open(r"C:\Users\Adam\PythonProjects\adventOfCode\2021\day6\input.txt", 'r') as f:
+with open(r"2021\day6\input.txt", 'r') as f:
     inp = [line.strip() for line in f.readlines()]
 
 fishes = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0}

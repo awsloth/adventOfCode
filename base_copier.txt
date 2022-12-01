@@ -11,9 +11,9 @@ def make_next():
 
     year, day = $year$, $day$
 
-    if not os.path.exists(os.path.join(root, str(year), f"day{day}", "solution2.py")):
-        with open(os.path.join(root, str(year), f"day{day}", "solution.py"), "r") as f:
-            with open(os.path.join(root, str(year), f"day{day}", "solution2.py"), "w") as f1:
+    if not os.path.exists(os.path.join(str(year), f"day{day}", "solution2.py")):
+        with open(os.path.join(str(year), f"day{day}", "solution.py"), "r") as f:
+            with open(os.path.join(str(year), f"day{day}", "solution2.py"), "w") as f1:
                 for line in f.readlines()[:-8]:
                     if "COMPLETE" in line:
                         line = "COMPLETE = False \n"
