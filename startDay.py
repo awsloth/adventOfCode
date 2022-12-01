@@ -1,9 +1,9 @@
 from aocd import get_data
 import datetime
 import os
-import webbrowser
 
-now = datetime.datetime.now()
+# now = datetime.datetime.now()
+now = datetime.datetime(2021, 12, 6, 5)
 
 if now.hour >= 5:
     cur_day = now.day
