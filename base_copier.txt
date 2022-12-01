@@ -1,0 +1,21 @@
+import os
+
+end_base = '''if COMPLETE:
+    submit(answer, year=year, day=day)
+else:
+    print(answer)
+'''
+
+def make_next():
+    root = r'$root$'
+
+    year, day = $year$, $day$
+
+    if not os.path.exists(os.path.join(root, str(year), f"day{day}", "solution2.py")):
+        with open(os.path.join(root, str(year), f"day{day}", "solution.py"), "r") as f:
+            with open(os.path.join(root, str(year), f"day{day}", "solution2.py"), "w") as f1:
+                for line in f.readlines()[:-8]:
+                    if "COMPLETE" in line:
+                        line = "COMPLETE = False \n"
+                    f1.write(line)
+                f1.write(end_base)
