@@ -2,8 +2,8 @@ from aocd import get_data
 import datetime
 import os
 
-# now = datetime.datetime.now()
-now = datetime.datetime(2021, 12, 7, 5)
+now = datetime.datetime.now()
+# now = datetime.datetime(2021, 12, 7, 5)
 
 if now.hour >= 5:
     cur_day = now.day
