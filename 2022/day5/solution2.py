@@ -21,9 +21,11 @@ for line in ops:
     nums = [[a.strip() for a in l.split("to")] for l in line.split("from")]
     quant = int(nums[0][0][5:])
     _from, to = map(int, nums[1])
+    temp = []
     for i in range(quant):
-        el = stacks[_from-1].pop()
-        stacks[to-1].append(el)
+        temp.append(stacks[_from-1].pop())
+    
+    stacks[to-1] += [*reversed(temp)]
 
 answer = ""
 for stack in stacks:
@@ -31,10 +33,6 @@ for stack in stacks:
         answer += stack[-1]
 
 if COMPLETE:
-    r = submit(answer, year=year, day=day)
-    soup = bs4.BeautifulSoup(r.text, "html.parser")
-    message = soup.article.text
-    if "That's the right answer" in message:
-        copier.make_next()
+    submit(answer, year=year, day=day)
 else:
     print(answer)
