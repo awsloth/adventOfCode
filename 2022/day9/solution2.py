@@ -11,7 +11,6 @@ with open(r"2022\day9\input.txt", 'r') as f:
 
 G_SIZE = 600
 t_count = [[0 for _ in range(G_SIZE)] for __ in range(G_SIZE)]
-grid = [['.' for _ in range(G_SIZE)] for __ in range(G_SIZE)]
 list_pos = [[0, 0] for _ in range(10)]
 for line in inp:
     op, num = line.split(" ")
