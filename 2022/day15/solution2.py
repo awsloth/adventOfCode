@@ -2,7 +2,7 @@ from aocd import submit
 import bs4
 import copier
 
-COMPLETE = True
+COMPLETE = False
 year, day = [2022, 15]
 
 with open(r"2022\day15\input.txt", 'r') as f:
