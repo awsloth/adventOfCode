@@ -1,6 +1,6 @@
 from aocd import submit
 
-COMPLETE = True
+COMPLETE = False
 year, day = [2022, 17]
 
 with open(r"2022\day17\input.txt", 'r') as f:
