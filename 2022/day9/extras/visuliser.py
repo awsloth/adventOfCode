@@ -15,7 +15,7 @@ def hsvToRGB(h, s, v):
     c = v * s
     x = c * (1 - abs((h/60)%2 - 1))
     m = v - c
-    # h %= 360
+    h %= 360
     if 0 <= h < 60:
         r_, g_, b_ = c, x, 0
     elif 60 <= h < 120:
