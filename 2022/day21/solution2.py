@@ -25,8 +25,8 @@ with open(r"2022\day21\input.txt", 'r') as f:
 # hmdt: 32""".split('\n')
 
 monkeys = {}
-_ops = {'*': lambda x, y: x * y, '/': lambda x, y: x / y, '-': lambda x, y: x - y, '+':lambda x, y: x + y}
-reverse = {'/': lambda x, y: x * y, '*': lambda x, y: x / y, '+': lambda x, y: x - y, '-':lambda x, y: x + y}
+_ops = {'*': lambda x, y: x * y, '/': lambda x, y: x // y, '-': lambda x, y: x - y, '+':lambda x, y: x + y}
+reverse = {'/': lambda x, y: x * y, '*': lambda x, y: x // y, '+': lambda x, y: x - y, '-':lambda x, y: x + y}
 
 for line in inp:
     name, operation = line.split(":")
