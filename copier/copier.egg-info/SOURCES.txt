@@ -1,0 +1,6 @@
+copier.py
+setup.py
+copier.egg-info/PKG-INFO
+copier.egg-info/SOURCES.txt
+copier.egg-info/dependency_links.txt
+copier.egg-info/top_level.txt

@@ -1,0 +1,14 @@
+COMPLETE = False
+year, day = [$year$, $day$]
+
+<-TO REPLACE->
+
+if __name__ == "__main__":
+    from aocd import submit
+
+    answer = main(not COMPLETE)
+    
+    if COMPLETE:
+        r = submit(answer, year=year, day=day)
+    else:
+        print(answer)
