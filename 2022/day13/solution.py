@@ -1,12 +1,5 @@
-from aocd import submit
-import bs4
-import copier
-
-COMPLETE = True
+COMPLETE = False
 year, day = [2022, 13]
-
-with open(r"2022\day13\input.txt", 'r') as f:
-    inp = f.read()
 
 def strToList(string):
     c_list = []
@@ -62,33 +55,50 @@ def recurSum(left, right):
             return -1
 
     return 0
-        
-answer = 0
-for (i, pair) in enumerate(inp.split("\n\n")):
-    added = False
-    left, right = map(strToList, pair.split("\n"))
-    for (l, r) in zip(left, right):
-        s = recurSum(l, r)
-        if s == 1:
+
+def main(enabled_print=True, test=False):
+    if test:
+        with open(r"2022\day13\test.txt", 'r') as f:
+            inp = f.read()
+    else:
+        with open(r"2022\day13\input.txt", 'r') as f:
+            inp = f.read()
+            
+    answer = 0
+    for (i, pair) in enumerate(inp.split("\n\n")):
+        added = False
+        left, right = map(strToList, pair.split("\n"))
+        for (l, r) in zip(left, right):
+            s = recurSum(l, r)
+            if s == 1:
+                if not added:
+                    answer += i + 1
+                    added = True
+            elif s == -1:
+                added = True
+                break
+    
+        if len(right) > len(left):
             if not added:
                 answer += i + 1
-                added = True
-        elif s == -1:
-            added = True
-            break
+        elif len(right) < len(left):
+            continue
+        
+    return answer
 
-    if len(right) > len(left):
-        if not added:
-            answer += i + 1
-    elif len(right) < len(left):
-        continue
+if __name__ == "__main__":
+    from aocd import submit
+
+    import bs4
+    import copier
+
+    answer = main(not COMPLETE)
     
-
-if COMPLETE:
-    r = submit(answer, year=year, day=day)
-    soup = bs4.BeautifulSoup(r.text, "html.parser")
-    message = soup.article.text
-    if "That's the right answer" in message:
-        copier.make_next()
-else:
-    print(answer)
+    if COMPLETE:
+        r = submit(answer, year=year, day=day)
+        soup = bs4.BeautifulSoup(r.text, "html.parser")
+        message = soup.article.text
+        if "That's the right answer" in message:
+            copier.make_next(year, day)
+    else:
+        print(answer)

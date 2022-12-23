@@ -1,12 +1,5 @@
-from aocd import submit
-import bs4
-import copier
-
-COMPLETE = True
+COMPLETE = False
 year, day = [2021, 4]
-
-with open(r"2021\day4\input.txt", 'r') as f:
-    inp = [line.strip() for line in f.readlines()]
 
 class Board:
     def __init__(self, board):
@@ -36,29 +29,45 @@ class Board:
                 if not self.hit[i][j]:
                     nums.append(self.board[i][j])
 
-        return sum(nums)        
+        return sum(nums) 
 
-calls = [*map(int, inp[0].split(","))]
-boards = []
-for (r1, r2, r3, r4, r5, _) in zip(inp[2::6], inp[3::6], inp[4::6], inp[5::6], inp[6::6], inp[7::6]):
-    boards.append(Board([r1, r2, r3, r4, r5]))
+def main(enabled_print=True, test=False):
+    if test:
+        with open(r"2021\day4\test.txt", 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+    else:
+        with open(r"2021\day4\input.txt", 'r') as f:
+            inp = [line.strip() for line in f.readlines()]       
+    
+    calls = [*map(int, inp[0].split(","))]
+    boards = []
+    for (r1, r2, r3, r4, r5, _) in zip(inp[2::6], inp[3::6], inp[4::6], inp[5::6], inp[6::6], inp[7::6]):
+        boards.append(Board([r1, r2, r3, r4, r5]))
+    
+    complete = False
+    i = 0
+    while not complete:
+        for board in boards:
+            board.getNum(calls[i])
+            if board.won():
+                complete = True
+                return board.nonCalled() * calls[i]
+    
+        i += 1
 
-complete = False
-i = 0
-while not complete:
-    for board in boards:
-        board.getNum(calls[i])
-        if board.won():
-            complete = True
-            answer = board.nonCalled() * calls[i]
+if __name__ == "__main__":
+    from aocd import submit
 
-    i += 1
+    import bs4
+    import copier
 
-if COMPLETE:
-    r = submit(answer, year=year, day=day)
-    soup = bs4.BeautifulSoup(r.text, "html.parser")
-    message = soup.article.text
-    if "That's the right answer" in message:
-        copier.make_next()
-else:
-    print(answer)
+    answer = main(not COMPLETE)
+    
+    if COMPLETE:
+        r = submit(answer, year=year, day=day)
+        soup = bs4.BeautifulSoup(r.text, "html.parser")
+        message = soup.article.text
+        if "That's the right answer" in message:
+            copier.make_next(year, day)
+    else:
+        print(answer)

@@ -1,12 +1,5 @@
-from aocd import submit
-import bs4
-import copier
-
-COMPLETE = True
+COMPLETE = False
 year, day = [2022, 11]
-
-with open(r"2022\day11\input.txt", 'r') as f:
-    inp = f.read()
 
 class Monkey:
     def __init__(self, _list, op, t_num):
@@ -37,51 +30,69 @@ def add(x, y):
 
 def times(x, y):
     return x * y
-functions = {"+":add, "*": times} 
 
-monkeys = []
-
-for monkey in inp.split("\n\n"):
-    index, items, op, test, true, false = monkey.split("\n")
-    index = index.split("Monkey ")[0]
-    items = [*map(int, items.split(":")[-1].split(","))]
-    op = op.split("= ")[-1]
-    if "+" in op:
-        symbol = "+"
+def main(enabled_print=True, test=False):
+    if test:
+        with open(r"2022\day11\test.txt", 'r') as f:
+            inp = f.read()
     else:
-        symbol = "*"
-    second = op.split(symbol)[-1]
-    if second == " old":
-        def func(x, symbol=symbol):
-            return functions[symbol](x, x)
-    else:
-        num = int(second)
-        def func(x, symbol=symbol, num=num):
-            return functions[symbol](x, num)
+        with open(r"2022\day11\input.txt", 'r') as f:
+            inp = f.read()
     
-    test = int(test.split("by ")[-1])
-    true = int(true.split("monkey ")[-1])
-    false = int(false.split("monkey ")[-1])
-    monkeys.append([Monkey(items, func, test), true, false])
-
-for monkey in monkeys:
-    monkey[0].t_list = monkeys[monkey[1]][0]
-    monkey[0].f_list = monkeys[monkey[2]][0]
-
-monkeys = [m[0] for m in monkeys]
-
-for i in range(20):
+    functions = {"+":add, "*": times} 
+    
+    monkeys = []
+    
+    for monkey in inp.split("\n\n"):
+        index, items, op, test, true, false = monkey.split("\n")
+        index = index.split("Monkey ")[0]
+        items = [*map(int, items.split(":")[-1].split(","))]
+        op = op.split("= ")[-1]
+        if "+" in op:
+            symbol = "+"
+        else:
+            symbol = "*"
+        second = op.split(symbol)[-1]
+        if second == " old":
+            def func(x, symbol=symbol):
+                return functions[symbol](x, x)
+        else:
+            num = int(second)
+            def func(x, symbol=symbol, num=num):
+                return functions[symbol](x, num)
+        
+        test = int(test.split("by ")[-1])
+        true = int(true.split("monkey ")[-1])
+        false = int(false.split("monkey ")[-1])
+        monkeys.append([Monkey(items, func, test), true, false])
+    
     for monkey in monkeys:
-        monkey.performGo()
+        monkey[0].t_list = monkeys[monkey[1]][0]
+        monkey[0].f_list = monkeys[monkey[2]][0]
+    
+    monkeys = [m[0] for m in monkeys]
+    
+    for i in range(20):
+        for monkey in monkeys:
+            monkey.performGo()
+    
+    monkeys = sorted(monkeys, key = lambda x: x.inspect_count, reverse=True)
+    
+    return monkeys[0].inspect_count * monkeys[1].inspect_count
 
-monkeys = sorted(monkeys, key = lambda x: x.inspect_count, reverse=True)
-answer = monkeys[0].inspect_count * monkeys[1].inspect_count
+if __name__ == "__main__":
+    from aocd import submit
 
-if COMPLETE:
-    r = submit(answer, year=year, day=day)
-    soup = bs4.BeautifulSoup(r.text, "html.parser")
-    message = soup.article.text
-    if "That's the right answer" in message:
-        copier.make_next()
-else:
-    print(answer)
+    import bs4
+    import copier
+
+    answer = main(not COMPLETE)
+    
+    if COMPLETE:
+        r = submit(answer, year=year, day=day)
+        soup = bs4.BeautifulSoup(r.text, "html.parser")
+        message = soup.article.text
+        if "That's the right answer" in message:
+            copier.make_next(year, day)
+    else:
+        print(answer)

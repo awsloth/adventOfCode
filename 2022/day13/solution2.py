@@ -1,13 +1,5 @@
-from aocd import submit
-import bs4
-import copier
-import functools
-
-COMPLETE = True
+COMPLETE = False
 year, day = [2022, 13]
-
-with open(r"2022\day13\input.txt", 'r') as f:
-    inp = f.read()
 
 def strToList(string):
     c_list = []
@@ -64,19 +56,35 @@ def recurSum(left, right):
 
     return 0
 
-answer = 0
-codes = [[[2]],[[6]]]
-for pair in inp.split("\n\n"):
-    codes += [*map(strToList, pair.split("\n"))]
+def main(enabled_print=True, test=False):
+    import functools
 
-codes = sorted(codes, key=functools.cmp_to_key(recurSum), reverse=True)
+    if test:
+        with open(r"2022\day13\test.txt", 'r') as f:
+            inp = f.read()
+    else:
+        with open(r"2022\day13\input.txt", 'r') as f:
+            inp = f.read()
+    
+    answer = 0
+    codes = [[[2]],[[6]]]
+    for pair in inp.split("\n\n"):
+        codes += [*map(strToList, pair.split("\n"))]
+    
+    codes = sorted(codes, key=functools.cmp_to_key(recurSum), reverse=True)
+    
+    index1 = codes.index([[2]]) + 1
+    index2 = codes.index([[6]]) + 1
+    
+    return index1*index2
+    
+if __name__ == "__main__":
+    from aocd import submit
 
-index1 = codes.index([[2]]) + 1
-index2 = codes.index([[6]]) + 1
+    answer = main(not COMPLETE)
+    
+    if COMPLETE:
+        r = submit(answer, year=year, day=day)
+    else:
+        print(answer)
 
-answer = index1*index2
-
-if COMPLETE:
-    submit(answer, year=year, day=day)
-else:
-    print(answer)

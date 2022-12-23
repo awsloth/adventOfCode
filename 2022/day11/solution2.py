@@ -1,12 +1,5 @@
-from aocd import submit
-import bs4
-import copier
-
-COMPLETE = True
+COMPLETE = False
 year, day = [2022, 11]
-
-with open(r"2022\day11\input.txt", 'r') as f:
-    inp = f.read()
 
 class Monkey:
     def __init__(self, _list, op, t_num):
@@ -37,53 +30,68 @@ def add(x, y):
 
 def times(x, y):
     return x * y
-functions = {"+":add, "*": times} 
 
-monkeys = []
-tests = []
-
-for monkey in inp.split("\n\n"):
-    index, items, op, test, true, false = monkey.split("\n")
-    index = index.split("Monkey ")[0]
-    items = [*map(int, items.split(":")[-1].split(","))]
-    op = op.split("= ")[-1]
-    if "+" in op:
-        symbol = "+"
+def main(enabled_print=True, test=False):
+    if test:
+        with open(r"2022\day11\_test.txt", 'r') as f:
+            inp = f.read()
     else:
-        symbol = "*"
-    second = op.split(symbol)[-1]
-    if second == " old":
-        def func(x, symbol=symbol):
-            return functions[symbol](x, x)
-    else:
-        num = int(second)
-        def func(x, symbol=symbol, num=num):
-            return functions[symbol](x, num)
+        with open(r"2022\day11\input.txt", 'r') as f:
+            inp = f.read()
     
-    test = int(test.split("by ")[-1])
-    true = int(true.split("monkey ")[-1])
-    false = int(false.split("monkey ")[-1])
-    monkeys.append([Monkey(items, func, test), true, false])
-    tests.append(test)
-
-DIV_VAL = 1
-for test in tests:
-    DIV_VAL *= test
-
-for monkey in monkeys:
-    monkey[0].t_list = monkeys[monkey[1]][0]
-    monkey[0].f_list = monkeys[monkey[2]][0]
-
-monkeys = [m[0] for m in monkeys]
-
-for i in range(10000):
+    functions = {"+":add, "*": times} 
+    
+    monkeys = []
+    tests = []
+    
+    for monkey in inp.split("\n\n"):
+        index, items, op, _test, true, false = monkey.split("\n")
+        index = index.split("Monkey ")[0]
+        items = [*map(int, items.split(":")[-1].split(","))]
+        op = op.split("= ")[-1]
+        if "+" in op:
+            symbol = "+"
+        else:
+            symbol = "*"
+        second = op.split(symbol)[-1]
+        if second == " old":
+            def func(x, symbol=symbol):
+                return functions[symbol](x, x)
+        else:
+            num = int(second)
+            def func(x, symbol=symbol, num=num):
+                return functions[symbol](x, num)
+        
+        _test = int(_test.split("by ")[-1])
+        true = int(true.split("monkey ")[-1])
+        false = int(false.split("monkey ")[-1])
+        monkeys.append([Monkey(items, func, _test), true, false])
+        tests.append(_test)
+    
+    DIV_VAL = 1
+    for _test in tests:
+        DIV_VAL *= _test
+    
     for monkey in monkeys:
-        monkey.performGo(DIV_VAL)
+        monkey[0].t_list = monkeys[monkey[1]][0]
+        monkey[0].f_list = monkeys[monkey[2]][0]
+    
+    monkeys = [m[0] for m in monkeys]
+    
+    for i in range(10000):
+        for monkey in monkeys:
+            monkey.performGo(DIV_VAL)
+    
+    monkeys = sorted(monkeys, key = lambda x: x.inspect_count, reverse=True)
+    return monkeys[0].inspect_count * monkeys[1].inspect_count
+    
+if __name__ == "__main__":
+    from aocd import submit
 
-monkeys = sorted(monkeys, key = lambda x: x.inspect_count, reverse=True)
-answer = monkeys[0].inspect_count * monkeys[1].inspect_count
+    answer = main(not COMPLETE)
+    
+    if COMPLETE:
+        r = submit(answer, year=year, day=day)
+    else:
+        print(answer)
 
-if COMPLETE:
-    submit(answer, year=year, day=day)
-else:
-    print(answer)

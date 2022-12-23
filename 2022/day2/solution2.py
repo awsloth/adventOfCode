@@ -1,9 +1,13 @@
 COMPLETE = True
 year, day = [2022, 2]
 
-def main(enabled_print=True):
-    with open(r"2022\day2\input.txt", 'r') as f:
-        inp = [line.strip() for line in f.readlines()]
+def main(enabled_print=True, test=False):
+    if test:
+        with open(r"2022\day2\test.txt", 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+    else:
+        with open(r"2022\day2\input.txt", 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
 
     answer = 0
     for line in inp:

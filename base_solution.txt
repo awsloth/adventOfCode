@@ -1,9 +1,13 @@
 COMPLETE = False
 year, day = [$year$, $day$]
 
-def main(enabled_print=True):
-    with open(r"$year$\day$day$\input.txt", 'r') as f:
-        inp = [line.strip() for line in f.readlines()]
+def main(enabled_print=True, test=False):
+    if test:
+        with open(r"$year$\day$day$\test.txt", 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+    else:
+        with open(r"$year$\day$day$\input.txt", 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
 
     return 1
 

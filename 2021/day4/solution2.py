@@ -1,12 +1,5 @@
-from aocd import submit
-import bs4
-import copier
-
-COMPLETE = True
+COMPLETE = False
 year, day = [2021, 4]
-
-with open(r"2021\day4\input.txt", 'r') as f:
-    inp = [line.strip() for line in f.readlines()]
 
 class Board:
     def __init__(self, board):
@@ -37,29 +30,44 @@ class Board:
                     nums.append(self.board[i][j])
 
         return sum(nums)      
+    
 
-inp += ['']  
+def main(enabled_print=True, test=False):
+    if test:
+        with open(r"2021\day4\test.txt", 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+    else:
+        with open(r"2021\day4\input.txt", 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+    
+    inp += ['']  
+    
+    calls = [*map(int, inp[0].split(","))]
+    boards = []
+    for (r1, r2, r3, r4, r5, _) in zip(inp[2::6], inp[3::6], inp[4::6], inp[5::6], inp[6::6], inp[7::6]):
+        boards.append(Board([r1, r2, r3, r4, r5]))
+    
+    complete = [0 for _ in range(len(boards))]
 
-calls = [*map(int, inp[0].split(","))]
-boards = []
-for (r1, r2, r3, r4, r5, _) in zip(inp[2::6], inp[3::6], inp[4::6], inp[5::6], inp[6::6], inp[7::6]):
-    boards.append(Board([r1, r2, r3, r4, r5]))
+    i = -1
+    while (complete.count(0) > 0):
+        i += 1
+        for (j, board) in enumerate(boards):
+            if not complete[j]:
+                board.getNum(calls[i])
+                if board.won():
+                    complete[j] = 1
+                    last = j
+    
+    return boards[last].nonCalled()*calls[i]
+    
+if __name__ == "__main__":
+    from aocd import submit
 
-complete = [0 for _ in range(len(boards))]
-i = -1
-while (complete.count(0) > 0):
-    i += 1
-    for (j, board) in enumerate(boards):
-        if not complete[j]:
-            board.getNum(calls[i])
-            if board.won():
-                complete[j] = 1
-                last = j
+    answer = main(not COMPLETE)
+    
+    if COMPLETE:
+        r = submit(answer, year=year, day=day)
+    else:
+        print(answer)
 
-
-answer = boards[last].nonCalled()*calls[i]
-
-if COMPLETE:
-    submit(answer, year=year, day=day)
-else:
-    print(answer)

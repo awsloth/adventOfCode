@@ -1,12 +1,5 @@
-from aocd import submit
-import bs4
-import copier
-
 COMPLETE = False
 year, day = [2022, 12]
-
-with open(r"2022\day12\input.txt", 'r') as f:
-    inp = [line.strip() for line in f.readlines()]
 
 class Node:
     def __init__(self, connections, x, y):
@@ -27,7 +20,7 @@ class Node:
                 else:
                     node.notes.append([self.weight + 1, self])
 
-def findMoves(x, y):
+def findMoves(x, y, inp):
     cur = inp[y][x]
     if cur == "S":
         cur = "a"
@@ -43,43 +36,6 @@ def findMoves(x, y):
 
     return moves
 
-for (i, line) in enumerate(inp):
-    if "S" in line:
-        start_pos = [line.index("S"), i]
-
-grid = [[Node(findMoves(i, j), i, j) for i in range(len(inp[j]))] for j in range(len(inp))]
-
-nodes = []
-
-for row in grid:
-    for node in row:
-        for pos in node.connections:
-            node.node_cons.append(grid[pos[1]][pos[0]])
-
-        nodes.append(node)
-
-grid[start_pos[1]][start_pos[0]].num = 1
-grid[start_pos[1]][start_pos[0]].weight = 0
-grid[start_pos[1]][start_pos[0]].notes = [[0, "start"]]
-
-i = 1
-while 1:
-    for node in nodes:
-        if node.num == i:
-            node.update()
-
-    saved = [nodes[0], float("inf")]
-    for node in nodes:
-        if node.notes != [] and node.notes[-1][0] < saved[1] and node.num == -1:
-            saved = [node, node.notes[-1][0]]
-    
-    i += 1
-    saved[0].num = i
-    saved[0].weight = saved[0].notes[-1][0]
-
-    if inp[saved[0].y][saved[0].x] == "E":
-        break
-
 def printRoute(node):
     if node.notes[-1][1] == "start":
         print(node.x, node.y)
@@ -88,15 +44,69 @@ def printRoute(node):
     print(node.x, node.y)
     printRoute(node.notes[-1][1])
 
-answer = saved[0].weight
+def main(enabled_print=True, test=False):
+    if test:
+        with open(r"2022\day12\test.txt", 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+    else:
+        with open(r"2022\day12\input.txt", 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+    
+    for (i, line) in enumerate(inp):
+        if "S" in line:
+            start_pos = [line.index("S"), i]
+    
+    grid = [[Node(findMoves(i, j, inp), i, j) for i in range(len(inp[j]))] for j in range(len(inp))]
+    
+    nodes = []
+    
+    for row in grid:
+        for node in row:
+            for pos in node.connections:
+                node.node_cons.append(grid[pos[1]][pos[0]])
+    
+            nodes.append(node)
+    
+    grid[start_pos[1]][start_pos[0]].num = 1
+    grid[start_pos[1]][start_pos[0]].weight = 0
+    grid[start_pos[1]][start_pos[0]].notes = [[0, "start"]]
+    
+    i = 1
+    while 1:
+        for node in nodes:
+            if node.num == i:
+                node.update()
+    
+        saved = [nodes[0], float("inf")]
+        for node in nodes:
+            if node.notes != [] and node.notes[-1][0] < saved[1] and node.num == -1:
+                saved = [node, node.notes[-1][0]]
+        
+        i += 1
+        saved[0].num = i
+        saved[0].weight = saved[0].notes[-1][0]
+    
+        if inp[saved[0].y][saved[0].x] == "E":
+            break
+    
+    if enabled_print:
+        printRoute(saved[0])
+    
+    return saved[0].weight
 
-# printRoute(saved[0])
+if __name__ == "__main__":
+    from aocd import submit
 
-if COMPLETE:
-    r = submit(answer, year=year, day=day)
-    soup = bs4.BeautifulSoup(r.text, "html.parser")
-    message = soup.article.text
-    if "That's the right answer" in message:
-        copier.make_next()
-else:
-    copier.make_next() # print(answer)
+    import bs4
+    import copier
+
+    answer = main(not COMPLETE)
+    
+    if COMPLETE:
+        r = submit(answer, year=year, day=day)
+        soup = bs4.BeautifulSoup(r.text, "html.parser")
+        message = soup.article.text
+        if "That's the right answer" in message:
+            copier.make_next(year, day)
+    else:
+        print(answer)
