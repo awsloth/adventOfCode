@@ -4,8 +4,8 @@ import datetime
 import os
 
 # Set date
-# now = datetime.datetime.now()
-now = datetime.datetime(2021, 12, 11, 5)
+now = datetime.datetime.now()
+# now = datetime.datetime(2021, 12, 11, 5)
 
 # Check what day it is based on hour
 if now.hour >= 5:
@@ -40,23 +40,6 @@ if not os.path.exists(os.path.join(root, str(year), f"day{cur_day}")):
         with open(f"{year}/day{cur_day}/solution.py", 'w') as f:
 
             # For line in base solution, copy into solution program
-            # replacing keyphrases
-            for line in s.readlines():
-                new_line = line
-                for (key, value) in phrase_replace.items():
-                    if key in new_line:
-                        x = new_line.find(key)
-                        new_line = new_line[:x] + value + new_line[x+len(key):]
-                
-                f.write(new_line)
-
-    # Open base copier
-    with open("base_copier.txt", "r") as s:
-
-        # Open copier program
-        with open(f"{year}/day{cur_day}/copier.py", 'w') as f:
-
-            # For line in base copier, copy into copier program
             # replacing keyphrases
             for line in s.readlines():
                 new_line = line
