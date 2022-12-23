@@ -1,7 +1,7 @@
 COMPLETE = False
 year, day = [2022, 22]
 
-def findWrap(x, y, dir, edges):
+def findWrap(x, y, dir, edges, SIZE):
     # Find matching edge
     wrap_edge = -1
     for (i, (e1, e2, d)) in enumerate(edges):
@@ -204,7 +204,7 @@ def main(enabled_print=True, test=False):
                     # Find wrap around point
                     saved_dir = direction
     
-                    next_pos, direction = findWrap(*cur_pos, direction, edges)
+                    next_pos, direction = findWrap(*cur_pos, direction, edges, SIZE)
                 
                     if grid[next_pos[1]][next_pos[0]] == "#":
                         # Hit a wall

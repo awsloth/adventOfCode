@@ -42,7 +42,12 @@ def main(enabled_print=True, test=False):
     run_time = 32
     # For each blueprint find optimised solution
     answer = 1
-    for (b_id, info) in [blueprints[0], blueprints[1], blueprints[2]]:
+    if test:
+        blueprints = [blueprints[0], blueprints[1]]
+    else:
+        blueprints = [blueprints[0], blueprints[1], blueprints[2]]
+    
+    for (b_id, info) in blueprints:
         cur_materials = [0, 0, 0, 0]
         cur_bots = [1, 0, 0, 0]
     

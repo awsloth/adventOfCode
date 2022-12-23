@@ -3,7 +3,7 @@ year, day = [2022, 9]
 
 def main(enabled_print=True, test=False):
     if test:
-        with open(r"2022\day9\test.txt", 'r') as f:
+        with open(r"2022\day9\test2.txt", 'r') as f:
             inp = [line.strip() for line in f.readlines()]
     else:
         with open(r"2022\day9\input.txt", 'r') as f:

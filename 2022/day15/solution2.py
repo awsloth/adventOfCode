@@ -24,8 +24,13 @@ def main(enabled_print=True, test=False):
     
         dist = abs(s_x-b_x) + abs(s_y-b_y)
         sensors.append([[s_x, s_y], dist])
+
+    if test:
+        max_size = 20
+    else:
+        max_size = 4_000_000
     
-    for row in range(4_000_000):
+    for row in range(max_size):
         covered = []
         for (s_pos, dist) in sensors:
             y_dist = abs(s_pos[1]-row)
@@ -69,8 +74,8 @@ def main(enabled_print=True, test=False):
         if covered[0][0] > 0:
             answer = row
             break
-        elif covered[0][1] < 4_000_000:
-            answer = 4_000_000*4_000_000 + row
+        elif covered[0][1] < max_size:
+            answer = max_size*4_000_000 + row
             break
     
         if enabled_print:

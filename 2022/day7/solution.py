@@ -1,17 +1,18 @@
 COMPLETE = False
 year, day = [2022, 7]
 
-def find_totals(dir: dict, path: str, totals: dict):
+def find_totals(dir: dict, path: str, totals):
     total = 0
     for (key, value) in dir.items():
         if type(value) == int:
             total += value
         else:
-            total += find_totals(value, path+f"/{key}")
+            _, val = find_totals(value, path+f"/{key}", totals)
+            total += val
     
     totals[path] = total
 
-    return totals
+    return (totals, total)
 
 def main(enabled_print=True, test=False):
     if test:
@@ -49,8 +50,7 @@ def main(enabled_print=True, test=False):
                         cur_dir = cur_dir[dir]
                     cur_dir[name] = int(size)
             
-    
-    totals = find_totals(directory, "/", {})
+    totals, _ = find_totals(directory, "/", {})
     
     return sum([num for num in totals.values() if num <= 100000])
 

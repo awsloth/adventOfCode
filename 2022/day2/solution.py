@@ -9,9 +9,23 @@ def main(enabled_print=True, test=False):
         with open(r"2022\day2\input.txt", 'r') as f:
             inp = [line.strip() for line in f.readlines()]
     
-    answer = inp
-    
-    return 1
+    answer = 0
+    for line in inp:
+        p_2 = {"X":"A", "Y":"B", "Z":"C"}
+        p_2_score = {"A":1, "B":2, "C":3}
+        win = {"B":"A", "C":"B", "A":"C"}
+
+        p1, p2 = line.split()
+        p2 = p_2[p2]
+
+        answer += p_2_score[p2]
+
+        if p1 == p2:
+            answer += 3
+        elif p1 == win[p2]:
+            answer += 6
+
+    return answer
 
 if __name__ == "__main__":
     from aocd import submit

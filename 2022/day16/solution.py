@@ -30,7 +30,7 @@ def recurFind(time, cur_node, nodes, score, dist_matrix):
         if r_time == 1:
             _score = score + choice[1]*r_time
         else:
-            _score = recurFind(r_time, choice[4], l, score + choice[1]*r_time)
+            _score = recurFind(r_time, choice[4], l, score + choice[1]*r_time, dist_matrix)
         scores.append(_score)
 
     if choices == []:
@@ -60,8 +60,13 @@ def main(enabled_print=True, test=False):
     for i in range(len(valves)):
         for (j, valve) in enumerate(valves[i][2]):
             valves[i][2][j] = name_dict[valve]
-    
-    answer = recurFind(30, 20, valves.copy(), 0, [dijkstras(i, valves) for i in range(len(valves))])
+
+    if test:
+        s_node = 0
+    else:
+        s_node = 20
+
+    answer = recurFind(30, s_node, valves.copy(), 0, [dijkstras(i, valves) for i in range(len(valves))])
     
     return answer
 

@@ -1,10 +1,14 @@
 COMPLETE = True
 year, day = [2022, 1]
 
-def main(enabled_print=True):
-    with open(r"day1\input.txt", 'r') as f:
-        inp = [line.strip() for line in f.readlines()]
-
+def main(enabled_print=True, test=False):
+    if test:
+        with open(r"2022\day1\test.txt", 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+    else:
+        with open(r"2022\day1\input.txt", 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+    
     runningTotal = 0
     totals = []
     for line in inp:
@@ -14,12 +18,9 @@ def main(enabled_print=True):
         else:
             runningTotal += int(line)
 
-    top = max(totals)
-    totals.remove(top)
-    second = max(totals)
-    totals.remove(second)
-    third = max(totals)
+    totals.append(runningTotal)
 
+    top, second, third, *_ = sorted(totals, reverse=True)
     return top + second + third
 
 if __name__ == "__main__":

@@ -1,6 +1,9 @@
 __pycache__
+__init__.py
 copier.py
 input.txt
 aocVenv
 chatGPT
 3dRenderer
+test.txt
+answers.json

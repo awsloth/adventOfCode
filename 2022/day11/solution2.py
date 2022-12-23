@@ -33,7 +33,7 @@ def times(x, y):
 
 def main(enabled_print=True, test=False):
     if test:
-        with open(r"2022\day11\_test.txt", 'r') as f:
+        with open(r"2022\day11\test.txt", 'r') as f:
             inp = f.read()
     else:
         with open(r"2022\day11\input.txt", 'r') as f:

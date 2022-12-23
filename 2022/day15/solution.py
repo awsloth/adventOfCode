@@ -9,7 +9,11 @@ def main(enabled_print=True, test=False):
         with open(r"2022\day15\input.txt", 'r') as f:
             inp = [line.strip() for line in f.readlines()]
 
-    row = 2_000_000
+    if test:
+        row = 10
+    else:
+        row = 2_000_000
+    
     beacons = []
     sensors = []
     for line in inp:

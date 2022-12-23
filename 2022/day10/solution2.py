@@ -33,6 +33,8 @@ def main(enabled_print=True, test=False):
 
     print(*map(''.join, screen), sep='\n')
 
+    return "-"
+
 
 if __name__ == "__main__":
     from aocd import submit

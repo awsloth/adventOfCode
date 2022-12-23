@@ -27,7 +27,7 @@ def recurFind(time, cur_node, nodes, score, dist_matrix):
         l = [n.copy() for n in nodes]
         l[choice[4]][3] = True
         r_time = time - dist_matrix[cur_node][choice[4]] - 1
-        _score = recurFind(r_time, choice[4], l, score + choice[1]*r_time)
+        _score = recurFind(r_time, choice[4], l, score + choice[1]*r_time, dist_matrix)
         for s in _score:
             scores.append([s, choice])
 
@@ -67,12 +67,17 @@ def main(enabled_print=True, test=False):
     for i in range(len(valves)):
         for (j, valve) in enumerate(valves[i][2]):
             valves[i][2][j] = name_dict[valve]
+
+    if test:
+        s_node = 0
+    else:
+        s_node = 20
     
-    solns = recurFind(26, 20, valves.copy(), 0, [dijkstras(i, valves) for i in range(len(valves))])
+    solns = recurFind(26, s_node, valves.copy(), 0, [dijkstras(i, valves) for i in range(len(valves))])
     
     answer = 0
     for i in range(len(solns)):
-        for j in range(len(solns)):
+        for j in range(i+1, len(solns)):
             if solns[i][0] + solns[j][0] > answer and set(solns[i][1]).intersection(set(solns[j][1])) == set():
                 answer = solns[i][0] + solns[j][0]
 
