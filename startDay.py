@@ -2,10 +2,17 @@
 from aocd import get_data
 import datetime
 import os
+import sys
 
-# Set date
-# now = datetime.datetime.now()
-now = datetime.datetime(2021, 12, 11, 5)
+if (len(sys.argv) == 1):
+    # Set date
+    now = datetime.datetime.now()
+else:
+    if (len(sys.argv) != 3):
+        print("Arguments not formatted correctly")
+    year = int(sys.argv[1])
+    day = int(sys.argv[2])
+    now = datetime.datetime(year, 12, day, 5)
 
 # Check what day it is based on hour
 if now.hour >= 5:
