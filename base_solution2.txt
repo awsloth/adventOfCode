@@ -4,9 +4,34 @@ year, day = [$year$, $day$]
 if __name__ == "__main__":
     from aocd import submit
 
-    answer = main(not COMPLETE)
+    import sys
+    import os
+
+    if (len(sys.argv) < 3):
+        print("Enter command line arguments")
+        exit(-1)
     
-    if COMPLETE:
+    arg_list = sys.argv[1:]
+    complete = arg_list[0].lower() == "true"
+    run_test = arg_list[1].upper() == "true"
+
+    if (len(sys.argv) == 4):
+        test_ans = int(sys.argv[3])
+    else:
+        test_ans = None
+
+    root = os.getcwd()
+    if (run_test and not os.path.exists(os.path.join(root, "text.txt"))):
+        print("No such test file exists")
+        exit(-1)
+
+    answer = main(not complete, run_test)
+    
+    if complete:
         r = submit(answer, year=year, day=day)
     else:
-        print(answer)
+        print(f"The answer is {test_ans}, you got {answer}.")
+        if (test_ans == answer):
+            print(f"You got it right! Time to submit!")
+        else:
+            print("Time to change ur code :(")

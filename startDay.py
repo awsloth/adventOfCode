@@ -4,8 +4,8 @@ import datetime
 import os
 
 # Set date
-now = datetime.datetime.now()
-# now = datetime.datetime(2021, 12, 11, 5)
+# now = datetime.datetime.now()
+now = datetime.datetime(2021, 12, 11, 5)
 
 # Check what day it is based on hour
 if now.hour >= 5:
@@ -17,7 +17,7 @@ else:
 year = now.year
 
 # Set root directory
-root = os.getcwd()
+root = "C:\\Users\\Adam\\PythonProjects\\adventOfCode"
 
 # Create files and directory if they do not exist
 if not os.path.exists(os.path.join(root, str(year), f"day{cur_day}")):
