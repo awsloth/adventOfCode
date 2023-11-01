@@ -1,7 +1,25 @@
 import os
-year, day = [$year$, $day$]
+year, day = [2019, 1]
 root = f"C:\\Users\\Adam\\PythonProjects\\adventOfCode\\{year}\\day{day}"
-<-TO REPLACE->
+
+def fuel_cost(mass):
+    total = 0
+    while mass//3 - 2 > 0:
+        total += mass//3 - 2
+        mass = mass//3 - 2
+
+    return total
+
+def main(enabled_print=True, test=False):
+    if test:
+        with open(os.path.join(root, "test.txt"), 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+    else:
+        with open(os.path.join(root, "input.txt"), 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+
+    return sum([fuel_cost(int(line)) for line in inp])
+
 if __name__ == "__main__":
     from aocd import submit
 

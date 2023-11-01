@@ -1,7 +1,17 @@
 import os
-year, day = [$year$, $day$]
+year, day = [2019, 1]
 root = f"C:\\Users\\Adam\\PythonProjects\\adventOfCode\\{year}\\day{day}"
-<-TO REPLACE->
+
+def main(enabled_print=True, test=False):
+    if test:
+        with open(os.path.join(root, "test.txt"), 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+    else:
+        with open(os.path.join(root, "input.txt"), 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+
+    return sum([int(line)//3 - 2 for line in inp])
+
 if __name__ == "__main__":
     from aocd import submit
 
@@ -34,7 +44,7 @@ if __name__ == "__main__":
         soup = bs4.BeautifulSoup(r.text, "html.parser")
         message = soup.article.text
         if "That's the right answer" in message:
-            print("YIPPEE!!!!")
+            copier.make_next(year, day)
     elif run_test:
         print(f"The answer is {test_ans}, you got {answer}.")
         if (test_ans == answer):

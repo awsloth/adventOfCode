@@ -3,7 +3,6 @@ year, day = [$year$, $day$]
 root = f"C:\\Users\\Adam\\PythonProjects\\adventOfCode\\{year}\\day{day}"
 
 def main(enabled_print=True, test=False):
-
     if test:
         with open(os.path.join(root, "test.txt"), 'r') as f:
             inp = [line.strip() for line in f.readlines()]
@@ -30,7 +29,7 @@ if __name__ == "__main__":
 
     if (len(sys.argv) == 4):
         test_ans = int(sys.argv[3])
-    else:
+    elif (run_test):
         print("Provide answer to test")
         exit(-1)
 
