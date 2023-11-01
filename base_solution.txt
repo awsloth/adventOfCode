@@ -41,10 +41,6 @@ if __name__ == "__main__":
     
     if complete:
         r = submit(answer, year=year, day=day)
-        soup = bs4.BeautifulSoup(r.text, "html.parser")
-        message = soup.article.text
-        if "That's the right answer" in message:
-            copier.make_next(year, day)
     elif run_test:
         print(f"The answer is {test_ans}, you got {answer}.")
         if (test_ans == answer):
