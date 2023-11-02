@@ -26,20 +26,20 @@ if __name__ == "__main__":
         print("Test file does not exist")
         exit(-1)
 
-    answer = main(not complete, run_test)
+    answer = main(not complete, run_test, complete)
     
-    if complete:
+    if run_test:
+        print(f"The answer is {test_ans}, you got {answer}.")
+        if (test_ans == answer):
+            print(f"You got it right! Time to submit!")
+        else:
+            print("Time to change ur code :(")
+    elif complete:
         r = submit(answer, year=year, day=day)
         if r is not None:
             soup = bs4.BeautifulSoup(r.data, "html.parser")
             message = soup.article.text
             if "That's the right answer" in message:
                 print("Yippee!")
-    elif run_test:
-        print(f"The answer is {test_ans}, you got {answer}.")
-        if (test_ans == answer):
-            print(f"You got it right! Time to submit!")
-        else:
-            print("Time to change ur code :(")
     else:
         print(f"You got {answer}")
