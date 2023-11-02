@@ -1,5 +1,5 @@
 import os
-year, day = [2020, 1]
+year, day = [2020, 3]
 root = f"C:\\Users\\Adam\\PythonProjects\\adventOfCode\\{year}\\day{day}"
 
 def main(enabled_print=True, test=False):
@@ -10,12 +10,17 @@ def main(enabled_print=True, test=False):
         with open(os.path.join(root, "input.txt"), 'r') as f:
             inp = [line.strip() for line in f.readlines()]
 
-    vals = [int(x) for x in inp]
+    total = 0
+    x_pos, y_pos = [0, 0]
+    while y_pos < len(inp):
+        if inp[y_pos][x_pos] == "#":
+            total += 1
 
-    for i in range(len(vals)):
-        for j in range(i):
-            if vals[i] + vals[j] == 2020:
-                return vals[i]*vals[j]
+        y_pos += 1
+        x_pos += 3
+        x_pos %= len(inp[0])
+
+    return total
 
 if __name__ == "__main__":
     from aocd import submit
@@ -46,10 +51,11 @@ if __name__ == "__main__":
     
     if complete:
         r = submit(answer, year=year, day=day)
-        soup = bs4.BeautifulSoup(r, "html.parser")
-        message = soup.article.text
-        if "That's the right answer" in message:
-            copier.make_next(year, day)
+        if r is not None:
+            soup = bs4.BeautifulSoup(r.data, "html.parser")
+            message = soup.article.text
+            if "That's the right answer" in message:
+                copier.make_next(year, day)
     elif run_test:
         print(f"The answer is {test_ans}, you got {answer}.")
         if (test_ans == answer):
