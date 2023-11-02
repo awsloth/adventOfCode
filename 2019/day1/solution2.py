@@ -24,7 +24,6 @@ if __name__ == "__main__":
     from aocd import submit
 
     import bs4
-    import copier
     import sys
 
     if (len(sys.argv) < 3):

@@ -41,7 +41,7 @@ if __name__ == "__main__":
     
     if complete:
         r = submit(answer, year=year, day=day)
-        soup = bs4.BeautifulSoup(r.text, "html.parser")
+        soup = bs4.BeautifulSoup(r, "html.parser")
         message = soup.article.text
         if "That's the right answer" in message:
             copier.make_next(year, day)

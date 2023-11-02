@@ -1,11 +1,22 @@
 import os
-year, day = [$year$, $day$]
+year, day = [2020, 1]
 root = f"C:\\Users\\Adam\\PythonProjects\\adventOfCode\\{year}\\day{day}"
-<-TO REPLACE->
+
+def main(enabled_print=True, test=False):
+    if test:
+        with open(os.path.join(root, "test.txt"), 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+    else:
+        with open(os.path.join(root, "input.txt"), 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+
+    return 1
+
 if __name__ == "__main__":
     from aocd import submit
 
     import bs4
+    import copier
     import sys
 
     if (len(sys.argv) < 3):
@@ -30,11 +41,10 @@ if __name__ == "__main__":
     
     if complete:
         r = submit(answer, year=year, day=day)
-        if r is not None:
-            soup = bs4.BeautifulSoup(r.data, "html.parser")
-            message = soup.article.text
-            if "That's the right answer" in message:
-                print("Yippee!")
+        soup = bs4.BeautifulSoup(r, "html.parser")
+        message = soup.article.text
+        if "That's the right answer" in message:
+            copier.make_next(year, day)
     elif run_test:
         print(f"The answer is {test_ans}, you got {answer}.")
         if (test_ans == answer):

@@ -1,11 +1,46 @@
 import os
-year, day = [$year$, $day$]
+year, day = [2020, 4]
 root = f"C:\\Users\\Adam\\PythonProjects\\adventOfCode\\{year}\\day{day}"
-<-TO REPLACE->
+
+def valid(passport: dict):
+    fields = set(["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"])
+    return (fields.intersection(set(passport.keys())) == fields)
+
+def main(enabled_print=True, test=False):
+    if test:
+        with open(os.path.join(root, "test.txt"), 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+    else:
+        with open(os.path.join(root, "input.txt"), 'r') as f:
+            inp = [line.strip() for line in f.readlines()]
+
+    passports = []
+    cur_pass = {}
+    for line in inp:
+        if line == "":
+            passports.append(cur_pass)
+            cur_pass = {}
+            continue
+
+        for attr in line.split(" "):
+            at, val = attr.split(":")
+            cur_pass[at] = val
+
+    passports.append(cur_pass)
+
+    total = 0
+    for passport in passports:
+        total += valid(passport)
+        if enabled_print and not valid(passport):
+            print(f"{passport.keys()=}")
+
+    return total
+
 if __name__ == "__main__":
     from aocd import submit
 
     import bs4
+    import copier
     import sys
 
     if (len(sys.argv) < 3):
@@ -27,14 +62,14 @@ if __name__ == "__main__":
         exit(-1)
 
     answer = main(not complete, run_test)
-    
+
     if complete:
-        r = submit(answer, year=year, day=day)
+        r = submit(answer, year=year, day=day, quiet=False)
         if r is not None:
             soup = bs4.BeautifulSoup(r.data, "html.parser")
             message = soup.article.text
             if "That's the right answer" in message:
-                print("Yippee!")
+                copier.make_next(year, day)
     elif run_test:
         print(f"The answer is {test_ans}, you got {answer}.")
         if (test_ans == answer):

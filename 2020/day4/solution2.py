@@ -1,6 +1,29 @@
 import os
-year, day = [$year$, $day$]
+year, day = [2020, 4]
 root = f"C:\\Users\\Adam\\PythonProjects\\adventOfCode\\{year}\\day{day}"
+
+def valid(passport: dict):
+    fields = set(["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"])
+    got_fields = (fields.intersection(set(passport.keys())) == fields)
+
+    if  not got_fields:
+        return False
+    
+    try:
+        byr = 1920 <= int(passport["byr"]) <= 2002
+        iyr = 2010 <= int(passport["iyr"]) <= 2020
+        eyr = 2020 <= int(passport["eyr"]) <= 2030
+        hgt = [150 <= int(passport["hgt"][:-2]) <= 193,
+            59 <= int(passport["hgt"][:-2]) <= 76][passport["hgt"][-2:]=="in"]
+
+        hclV = passport["hcl"]
+        hcl = hclV[0] == "#" and all([val in "0123456789abcdef" for val in hclV[1:]])
+        ecl = passport["ecl"] in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
+        pid = all([digit.isdigit() for digit in passport["pid"]]) and len(passport["pid"]) == 9
+    except:
+        return False
+    
+    return all([byr, iyr, eyr, hgt, hcl, ecl, pid])
 
 def main(enabled_print=True, test=False):
     if test:
@@ -10,13 +33,32 @@ def main(enabled_print=True, test=False):
         with open(os.path.join(root, "input.txt"), 'r') as f:
             inp = [line.strip() for line in f.readlines()]
 
-    return 1
+    passports = []
+    cur_pass = {}
+    for line in inp:
+        if line == "":
+            passports.append(cur_pass)
+            cur_pass = {}
+            continue
+
+        for attr in line.split(" "):
+            at, val = attr.split(":")
+            cur_pass[at] = val
+
+    passports.append(cur_pass)
+
+    total = 0
+    for passport in passports:
+        total += valid(passport)
+        if enabled_print and valid(passport):
+            print(f"{passport=}")
+
+    return total
 
 if __name__ == "__main__":
     from aocd import submit
 
     import bs4
-    import copier
     import sys
 
     if (len(sys.argv) < 3):
@@ -45,7 +87,7 @@ if __name__ == "__main__":
             soup = bs4.BeautifulSoup(r.data, "html.parser")
             message = soup.article.text
             if "That's the right answer" in message:
-                copier.make_next(year, day)
+                print("Yippee!")
     elif run_test:
         print(f"The answer is {test_ans}, you got {answer}.")
         if (test_ans == answer):
