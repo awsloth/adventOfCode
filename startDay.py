@@ -37,6 +37,8 @@ if not os.path.exists(os.path.join(root, str(year), f"day{cur_day}")):
         content = get_data(year=year, day=cur_day)
         f.write(content)
 
+    with open(f"{year}/day{cur_day}/test.txt", 'w') as f:...
+
     # Phrases to replace
     phrase_replace = {"$year$":str(year), "$day$":str(cur_day), "$root$":root}
 
