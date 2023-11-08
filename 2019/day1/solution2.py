@@ -1,6 +1,6 @@
 import os
 year, day = [2019, 1]
-root = f"C:\\Users\\Adam\\PythonProjects\\adventOfCode\\{year}\\day{day}"
+root = os.path.join(os.getcwd(), str(year), f"day{day}")
 
 def fuel_cost(mass):
     total = 0

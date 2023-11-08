@@ -1,7 +1,6 @@
 import os
 year, day = [2021, 11]
-root = f"C:\\Users\\Adam\\PythonProjects\\adventOfCode\\{year}\\day{day}"
-root = f"C:\\Users\\Adam\\PythonProjects\\adventOfCode\\{year}\\day{day}"
+root = os.path.join(os.getcwd(), str(year), f"day{day}")
 
 def step(grid):
     grid = [[x+1 for x in line] for line in grid]

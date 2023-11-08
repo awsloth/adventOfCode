@@ -1,6 +1,6 @@
 import os
 year, day = [$year$, $day$]
-root = f"C:\\Users\\Adam\\PythonProjects\\adventOfCode\\{year}\\day{day}"
+root = os.path.join(os.getcwd(), str(year), f"day{day}")
 <-TO REPLACE->
 if __name__ == "__main__":
     from aocd import submit

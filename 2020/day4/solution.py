@@ -1,6 +1,6 @@
 import os
 year, day = [2020, 4]
-root = f"C:\\Users\\Adam\\PythonProjects\\adventOfCode\\{year}\\day{day}"
+root = os.path.join(os.getcwd(), str(year), f"day{day}")
 
 def valid(passport: dict):
     fields = set(["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"])

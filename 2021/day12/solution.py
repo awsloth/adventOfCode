@@ -1,6 +1,6 @@
 import os
 year, day = [2021, 12]
-root = f"C:\\Users\\Adam\\PythonProjects\\adventOfCode\\{year}\\day{day}"
+root = os.path.join(os.getcwd(), str(year), f"day{day}")
 
 class Cavern:
     def __init__(self, name: str):

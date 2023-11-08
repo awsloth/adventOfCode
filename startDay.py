@@ -24,7 +24,7 @@ else:
 year = now.year
 
 # Set root directory
-root = "C:\\Users\\Adam\\PythonProjects\\adventOfCode"
+root = os.getcwd()
 
 # Create files and directory if they do not exist
 if not os.path.exists(os.path.join(root, str(year), f"day{cur_day}")):

@@ -2,7 +2,7 @@ import os
 
 def make_next(year, day):
     # Set root directory
-    root = "C:\\Users\\Adam\\PythonProjects\\adventOfCode"
+    root = os.getcwd()
 
     # If file exists, do not run
     if os.path.exists(os.path.join(str(year), f"day{day}", "solution2.py")):

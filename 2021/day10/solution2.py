@@ -3,10 +3,10 @@ year, day = [2021, 10]
 
 def main(enabled_print=True, test=False):
     if test:
-        with open(r"2021\day10\test.txt", 'r') as f:
+        with open(r"2021/day10/test.txt", 'r') as f:
             inp = [line.strip() for line in f.readlines()]
     else:
-        with open(r"2021\day10\input.txt", 'r') as f:
+        with open(r"2021/day10/input.txt", 'r') as f:
             inp = [line.strip() for line in f.readlines()]
     
     co = {"}":"{", "]":"[", ")":"(", ">":"<"}

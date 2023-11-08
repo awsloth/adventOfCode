@@ -1,6 +1,6 @@
 import os
 year, day = [2020, 1]
-root = f"C:\\Users\\Adam\\PythonProjects\\adventOfCode\\{year}\\day{day}"
+root = os.path.join(os.getcwd(), str(year), f"day{day}")
 
 def main(enabled_print=True, test=False):
     if test:
