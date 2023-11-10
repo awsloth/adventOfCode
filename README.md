@@ -14,3 +14,23 @@ I use the advent-of-code-data library that is on pip. I have also made myself so
 
 - Solutions in other languages (Haskell, C, Rust)
 - Run-time tester
+
+## How to set up and run
+
+### Set-up
+
+Clone the repository then install the advent-of-code-data library via pip, using `python -m pip install advent-of-code-data`. Then install the local library copier using `python -m pip install -e copier`.
+
+### Starting a day
+
+Run the command `python startDay.py <year> <day>`, where year and day will default to the current date if not inputted. This will then create the corresponding folder and files to solve the days problem. It will also make a copy of the input in `input.txt` and create a blank `test.txt` file to input test data into.
+
+### Running code
+
+To run your solution you can run the command `python <year>/<day>/solution.py <submit> <test> <testAnswer>`, where submit is "True" if you want to submit, test is "True" if you want to test and testAnswer is the answer to the test case
+
+On success a second file will be created called `solution2.py`, this has all your code copied into a new file so you can keep your old solution with minimal effort. This is called in a similar way to the first solution just changing `solution.py` to `solution2.py`/
+
+### What to do if the copier fails
+
+When the copier fails, you can run it manually via the command `python copier/copier.py <year> <day>` and it will create the `solution2.py` by itself, note that if the file already exists you will have to delete it in order for it to create a new one.
