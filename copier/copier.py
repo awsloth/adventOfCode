@@ -14,6 +14,7 @@ def make_next(year, day):
         lines = f.readlines()
 
     start_index = lines.index('root = os.path.join(os.getcwd(), str(year), f"day{day}")\n')
+
     end_index = lines.index('if __name__ == "__main__":\n')
 
     functions = lines[start_index+1:end_index]
