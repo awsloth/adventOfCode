@@ -13,7 +13,7 @@ def make_next(year, day):
     with open(os.path.join(str(year), f"day{day}", "solution.py"), "r") as f:
         lines = f.readlines()
 
-    start_index = lines.index('root = os.path.join(os.getcwd(), str(year), f"day{day}")\n')
+    start_index = lines.index('root: str = os.path.join(os.getcwd(), str(year), f"day{day}")\n')
 
     end_index = lines.index('if __name__ == "__main__":\n')
 
