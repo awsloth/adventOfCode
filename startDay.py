@@ -4,15 +4,49 @@ import datetime
 import os
 import sys
 
-if (len(sys.argv) == 1):
-    # Set date
-    now = datetime.datetime.now()
-else:
-    if (len(sys.argv) != 3):
-        print("Arguments not formatted correctly")
-    year = int(sys.argv[1])
-    day = int(sys.argv[2])
-    now = datetime.datetime(year, 12, day, 5)
+args = [x.lower() for x in sys.argv]
+first_two_chars = [x[:2] for x in args]
+
+now = datetime.datetime.now()
+
+year = None
+day = None
+
+if "-y" in first_two_chars:
+    # Year argument
+    valid = False
+    for arg in args:
+        if "-y" in arg and "=" in arg:
+            try:
+                year = int(arg.removeprefix("-y="))
+                valid = True
+            except ValueError:
+                raise Exception("Invalid input for year")
+    
+    if not valid:
+        raise Exception("Invalid format for year specifier, takes form -y=<year>")
+            
+if "-d" in first_two_chars:
+    # Year argument
+    valid = False
+    for arg in args:
+        if "-d" in arg and "=" in arg:
+            try:
+                day = int(arg.removeprefix("-d="))
+                valid = True
+            except ValueError:
+                raise Exception("Invalid input for day, takes integer input")
+    
+    if not valid:
+        raise Exception("Invalid format for day specifier, takes form -d=<day>")
+            
+if year is None:
+    year = now.year
+if day is None:
+    day = now.day
+
+# Set new date
+now = datetime.datetime(year, 12, day, 5)
 
 # Check what day it is based on hour
 if now.hour >= 5:
@@ -40,7 +74,7 @@ if not os.path.exists(os.path.join(root, str(year), f"day{cur_day}")):
     with open(f"{year}/day{cur_day}/test.txt", 'w') as f:...
 
     # Phrases to replace
-    phrase_replace = {"$year$":str(year), "$day$":str(cur_day), "$root$":root}
+    phrase_replace = {"$year$":str(year), "$day$":str(cur_day)}
 
     # Open base solution
     with open("base_solution.txt", "r") as s:

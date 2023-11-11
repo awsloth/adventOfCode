@@ -23,7 +23,7 @@ Clone the repository then install the advent-of-code-data library via pip, using
 
 ### Starting a day
 
-Run the command `python startDay.py <year> <day>`, where year and day will default to the current date if not inputted. This will then create the corresponding folder and files to solve the days problem. It will also make a copy of the input in `input.txt` and create a blank `test.txt` file to input test data into.
+Run the command `python startDay.py -y=<year> -d=<day>`, where year and day will default to the current day/year if not inputted. This will then create the corresponding folder and files to solve the days problem. It will also make a copy of the input in `input.txt` and create a blank `test.txt` file to input test data into.
 
 ### Running code
 
