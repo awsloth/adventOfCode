@@ -1,45 +1,91 @@
 import os
+import logging
 year, day = [$year$, $day$]
-root = os.path.join(os.getcwd(), str(year), f"day{day}")
+root: str = os.path.join(os.getcwd(), str(year), f"day{day}")
 <-TO REPLACE->
 if __name__ == "__main__":
+    # Import libraries
     from aocd import submit
 
     import bs4
     import sys
 
-    if (len(sys.argv) < 3):
-        print("Enter command line arguments")
-        exit(-1)
+    # Get command line arguments
+    arg_list: list[str] = [x.upper() for x in sys.argv]
+
+    # Detect logging level wanted
+    loglevel = None
+    for arg in arg_list:
+        if "--log" in arg.lower():
+            loglevel = arg.removeprefix("--LOG=")
+
+    # If none specified, assume base
+    if loglevel is None:
+        loglevel = "WARNING"
+
+    # Get logging level
+    numeric_level = getattr(logging, loglevel.upper(), None)
+
+    # Check value is ccorrect
+    if not isinstance(numeric_level, int):
+        raise ValueError(f"Invalid log level: {loglevel}")
+
+    # Set logging config
+    logging.basicConfig(format='[%(levelname)s]: %(message)s', level=numeric_level)
+
+    # Take first two character to detect for -T
+    first_two_chars: list[str] = [x[:2] for x in arg_list]
+
+    # Check whether user has input both
+    if "-T" in first_two_chars and "-R" in arg_list:
+        raise Exception("Input either -T or -R, not both")
     
-    arg_list = sys.argv[1:]
-    complete = arg_list[0].lower() == "true"
-    run_test = arg_list[1].lower() == "true"
+    # Check which (if any user has input)
+    test_ans = None
+    if "-R" in arg_list:
+        # Set run type to real
+        run_type = Run.REAL
 
-    if (len(sys.argv) == 4):
-        test_ans = int(sys.argv[3])
-    elif (run_test):
-        print("Provide answer to test")
-        exit(-1)
-
-    if (run_test and not os.path.exists(os.path.join(root, "test.txt"))):
-        print("Test file does not exist")
-        exit(-1)
-
-    answer = main(not complete, run_test, complete)
+    elif "-T" in first_two_chars:
+        # Test that user has put in a numeric value for the test answer
+        valid = False
+        for elem in arg_list:
+            if "-T" in elem and "=" in elem:
+                try:
+                    test_ans = int(elem.split("=")[1])
+                    valid = True
+                except ValueError:
+                    raise Exception("Enter a numeric value for test answer")
+        
+        # Raise exception if user input wrong value
+        if not valid:
+            raise Exception("Argument -T takes input -T=<test_answer>")
+        
+        # Set run type to test
+        run_type = Run.TEST
+    else:
+        # If user has input neither raise exception
+        raise Exception("You need to input either -T or -R")
     
-    if run_test:
-        print(f"The answer is {test_ans}, you got {answer}.")
-        if (test_ans == answer):
-            print(f"You got it right! Time to submit!")
-        else:
-            print("Time to change ur code :(")
-    elif complete:
+    # Run solution
+    answer = main(root, run_type)
+
+    # Test answer
+    if run_type == Run.REAL:
         r = submit(answer, year=year, day=day)
         if r is not None:
             soup = bs4.BeautifulSoup(r.data, "html.parser")
             message = soup.article.text
             if "That's the right answer" in message:
                 print("Yippee!")
+    
+    elif run_type == Run.TEST:
+        print(f"The answer is {test_ans}, you got {answer}.")
+
+        if (test_ans == answer):
+            print(f"You got it right! Time to submit!")
+        else:
+            print("Time to change ur code :(")
+        
     else:
-        print(f"You got {answer}")
+        raise Exception("Somehow run_type was not test or real")
