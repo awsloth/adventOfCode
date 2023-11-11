@@ -27,9 +27,9 @@ Run the command `python startDay.py <year> <day>`, where year and day will defau
 
 ### Running code
 
-To run your solution you can run the command `python <year>/<day>/solution.py <submit> <test> <testAnswer>`, where submit is "True" if you want to submit, test is "True" if you want to test and testAnswer is the answer to the test case
+To run your solution you can run the command `python <year>/<day>/solution.py`, using arguments `-T=<test_answer>` to run from test file, `-R` to run from the input file and submit and `--log=<log_level>` to set the logging level of the 
 
-On success a second file will be created called `solution2.py`, this has all your code copied into a new file so you can keep your old solution with minimal effort. This is called in a similar way to the first solution just changing `solution.py` to `solution2.py`/
+On success a second file will be created called `solution2.py`, this has all your code copied into a new file so you can keep your old solution with minimal effort. This is called in a similar way to the first solution just changing `solution.py` to `solution2.py`.
 
 ### What to do if the copier fails
 
