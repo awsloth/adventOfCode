@@ -131,6 +131,8 @@ class IntCom:
                 self.pointer+= 2
             case 99:
                 self.halted = True
+            case _:
+                raise ValueError("Came across unexpected instruction")
 
         return None
 
@@ -160,7 +162,7 @@ def main(root: str, run_type: Run = Run.TEST) -> int:
     cur_dir = (0, -1)
     dir_order = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 
-    coloured = []
+    coloured: list[list[int]] = []
 
     while not intcode_com.halted:
         next_instruction = intcode_com.run_step(grid[cur_pos[1]][cur_pos[0]])
@@ -212,7 +214,7 @@ def main(root: str, run_type: Run = Run.TEST) -> int:
 
 if __name__ == "__main__":
     # Import libraries
-    from aocd import _impartial_submit as submit
+    from aocd import submit
     from urllib3 import BaseHTTPResponse
 
     import sys
@@ -221,21 +223,21 @@ if __name__ == "__main__":
     arg_list: list[str] = [x.upper() for x in sys.argv]
 
     # Detect logging level wanted
-    LOG_LEVEL = None
+    log_level = None
     for arg in arg_list:
         if "--log" in arg.lower():
-            LOG_LEVEL = arg.removeprefix("--LOG=")
+            log_level = arg.removeprefix("--LOG=")
 
     # If none specified, assume base
-    if LOG_LEVEL is None:
-        LOG_LEVEL = "WARNING"
+    if log_level is None:
+        log_level = "WARNING"
 
     # Get logging level
-    numeric_level = getattr(logging, LOG_LEVEL.upper(), None)
+    numeric_level = getattr(logging, log_level.upper(), None)
 
     # Check value is ccorrect
     if not isinstance(numeric_level, int):
-        raise ValueError(f"Invalid log level: {LOG_LEVEL}")
+        raise ValueError(f"Invalid log level: {log_level}")
 
     # Set logging config
     logging.basicConfig(format='[%(levelname)s]: %(message)s', level=numeric_level)
@@ -248,46 +250,46 @@ if __name__ == "__main__":
         raise ValueError("Input either -T or -R, not both")
 
     # Check which (if any user has input)
-    TEST_ANS = None
+    test_ans = None
     if "-R" in arg_list:
         # Set run type to real
-        PROG_RUN_TYPE = Run.REAL
+        prog_run_type = Run.REAL
 
     elif "-T" in first_two_chars:
         # Test that user has put in a numeric value for the test answer
-        VALID = False
+        valid = False
         for elem in arg_list:
             if "-T" in elem and "=" in elem:
                 try:
-                    TEST_ANS = int(elem.split("=")[1])
-                    VALID = True
+                    test_ans = int(elem.split("=")[1])
+                    valid = True
                 except ValueError as exc:
                     raise ValueError("Enter a numeric value for test answer") from exc
 
         # Raise exception if user input wrong value
-        if not VALID:
+        if not valid:
             raise ValueError("Argument -T takes input -T=<test_answer>")
 
         # Set run type to test
-        PROG_RUN_TYPE = Run.TEST
+        prog_run_type = Run.TEST
     else:
         # If user has input neither raise exception
         raise ValueError("You need to input either -T or -R")
 
     # Run solution
-    ANSWER = main(ROOT_DIR, PROG_RUN_TYPE)
+    ANSWER = main(ROOT_DIR, prog_run_type)
 
     # Test answer
-    if PROG_RUN_TYPE == Run.REAL:
+    if prog_run_type == Run.REAL:
         r: BaseHTTPResponse | None = submit(ANSWER, year=year, day=day)
         if r is not None:
             if "That's the right answer" in str(r.data):
                 print("Yippee!")
 
-    elif PROG_RUN_TYPE == Run.TEST:
-        print(f"The answer is {TEST_ANS}, you got {ANSWER}.")
+    elif prog_run_type == Run.TEST:
+        print(f"The answer is {test_ans}, you got {ANSWER}.")
 
-        if TEST_ANS == ANSWER:
+        if test_ans == ANSWER:
             print("You got it right! Time to submit!")
         else:
             print("Time to change ur code :(")

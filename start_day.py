@@ -1,10 +1,11 @@
-# Import libraries
-from aocd import get_data
+"""Module to create the files needed to code a solution to an advent of code problem"""
 import datetime
 import os
 import sys
 
-args = [x.lower() for x in sys.argv]
+from aocd import get_data
+
+args: list[str] = [x.lower() for x in sys.argv]
 first_two_chars = [x[:2] for x in args]
 
 now = datetime.datetime.now()
@@ -20,12 +21,12 @@ if "-y" in first_two_chars:
             try:
                 year = int(arg.removeprefix("-y="))
                 valid = True
-            except ValueError:
-                raise Exception("Invalid input for year")
-    
+            except ValueError as err:
+                raise ValueError("Invalid input for year") from err
+
     if not valid:
-        raise Exception("Invalid format for year specifier, takes form -y=<year>")
-            
+        raise ValueError("Invalid format for year specifier, takes form -y=<year>")
+
 if "-d" in first_two_chars:
     # Year argument
     valid = False
@@ -34,12 +35,12 @@ if "-d" in first_two_chars:
             try:
                 day = int(arg.removeprefix("-d="))
                 valid = True
-            except ValueError:
-                raise Exception("Invalid input for day, takes integer input")
-    
+            except ValueError as err:
+                raise ValueError("Invalid input for day, takes integer input") from err
+
     if not valid:
-        raise Exception("Invalid format for day specifier, takes form -d=<day>")
-            
+        raise ValueError("Invalid format for day specifier, takes form -d=<day>")
+
 if year is None:
     year = now.year
 if day is None:
@@ -67,20 +68,21 @@ if not os.path.exists(os.path.join(root, str(year), f"day{cur_day}")):
     os.makedirs(f"{year}/day{cur_day}")
 
     # Get input
-    with open(f"{year}/day{cur_day}/input.txt", 'w') as f:
+    with open(f"{year}/day{cur_day}/input.txt", 'w', encoding="utf8") as f:
         content = get_data(year=year, day=cur_day)
         f.write(content)
 
-    with open(f"{year}/day{cur_day}/test.txt", 'w') as f:...
+    with open(f"{year}/day{cur_day}/test.txt", 'w', encoding="utf8") as f:
+        pass
 
     # Phrases to replace
     phrase_replace = {"$year$":str(year), "$day$":str(cur_day)}
 
     # Open base solution
-    with open("base_solution.txt", "r") as s:
+    with open("base_solution.txt", "r", encoding="utf8") as s:
 
         # Open solution program
-        with open(f"{year}/day{cur_day}/solution.py", 'w') as f:
+        with open(f"{year}/day{cur_day}/solution.py", 'w', encoding="utf8") as f:
 
             # For line in base solution, copy into solution program
             # replacing keyphrases
@@ -90,5 +92,5 @@ if not os.path.exists(os.path.join(root, str(year), f"day{cur_day}")):
                     if key in new_line:
                         x = new_line.find(key)
                         new_line = new_line[:x] + value + new_line[x+len(key):]
-                
+
                 f.write(new_line)
