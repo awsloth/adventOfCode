@@ -1,113 +1,104 @@
+"""Module to solve part 2 of advent of code 2019-11"""
+from enum import Enum
 import os
 import logging
 year, day = [2019, 11]
-root: str = os.path.join(os.getcwd(), str(year), f"day{day}")
+ROOT_DIR: str = os.path.join(os.getcwd(), str(year), f"day{day}")
 
-class Run:
+
+class Run(Enum):
+    """Enum for program run type"""
     TEST = 0
     REAL = 1
 
-class Computer:
-    def __init__(self, memory):
-        self.pointer = 0
-        self.rel_base = 0
-        self.mem = memory
-        self.halted = False
+class IntCom:
+    """Class to handle running the intcode computer"""
 
-    def find_pos(self, mode, pointer):
+    def __init__(self, memory: dict[int, int]):
+        self.pointer: int = 0
+        self.rel_base: int = 0
+        self.mem: dict[int, int] = memory
+        self.halted: bool = False
+
+    def find_pos(self, mode: int, pointer: int) -> int:
+        """Find value of variable based on pointer and mode"""
         match (mode):
             case 2:
                 if self.mem[pointer]+self.rel_base not in self.mem:
                     self.mem[self.mem[pointer]+self.rel_base] = 0
-                
+
                 return self.mem[self.mem[pointer]+self.rel_base]
             case 1:
                 if pointer not in self.mem:
                     self.mem[pointer] = 0
 
                 return self.mem[pointer]
-            case 0:
+            case _:
                 if self.mem[pointer] not in self.mem:
                     self.mem[self.mem[pointer]] = 0
 
                 return self.mem[self.mem[pointer]]
-    
-    def find_pointer(self, mode, pointer):
+
+    def find_pointer(self, mode: int, pointer: int) -> int:
+        """Find pointer to output data to"""
         match (mode):
             case 2:
                 if self.mem[pointer]+self.rel_base not in self.mem:
                     self.mem[self.mem[pointer]+self.rel_base] = 0
-                
+
                 return self.mem[pointer]+self.rel_base
-            case 0:
+            case _:
                 if self.mem[pointer] not in self.mem:
                     self.mem[self.mem[pointer]] = 0
 
                 return self.mem[pointer]
-        
-    def run_step(self, pot_input):
+
+    def run_step(self, pot_input: int) -> int | None:
+        """Runs a step of the code, with pot_input being potential input"""
         cur_instruction = str(self.mem[self.pointer])[-2:]
         modes = [int(x) for x in str(self.mem[self.pointer])[:-2].rjust(3, "0")]
 
         match (int(cur_instruction)):
             case 1:
-                logging.debug("1")
                 var1 = self.find_pos(modes[-1], self.pointer+1)
                 var2 = self.find_pos(modes[-2], self.pointer+2)
 
                 pointer_val = self.find_pointer(modes[-3], self.pointer+3)
-
-                if pointer_val < 0:
-                    raise Exception("Attempted to write to negative index")
 
                 self.mem[pointer_val] = var1 + var2
                 self.pointer+= 4
-                pass
             case 2:
-                logging.debug("2")
                 var1 = self.find_pos(modes[-1], self.pointer+1)
                 var2 = self.find_pos(modes[-2], self.pointer+2)
 
                 pointer_val = self.find_pointer(modes[-3], self.pointer+3)
 
-                if pointer_val < 0:
-                    raise Exception("Attempted to write to negative index")
-                
                 self.mem[pointer_val] = var1 * var2
                 self.pointer+= 4
-                pass
             case 3:
-                logging.debug("3")
                 pointer_val = self.find_pointer(modes[-1], self.pointer+1)
 
-                if pointer_val < 0:
-                    raise Exception("Attempted to write to negative index")
-                
                 self.mem[pointer_val] = pot_input
-                
+
                 self.pointer+= 2
-                pass
             case 4:
-                logging.debug("4")
                 self.pointer+= 2
-                
+
                 if modes[-1] == 2:
                     return self.mem[self.mem[self.pointer-1]+self.rel_base]
-                elif modes[-1]:
+                if modes[-1]:
                     return self.mem[self.pointer-1]
-                else:
-                    return self.mem[self.mem[self.pointer-1]]
+
+                return self.mem[self.mem[self.pointer-1]]
             case 5:
-                logging.debug("5")
                 var1 = self.find_pos(modes[-1], self.pointer+1)
                 var2 = self.find_pos(modes[-2], self.pointer+2)
-                
+
                 if var1:
                     self.pointer= var2
                 else:
                     self.pointer+= 3
             case 6:
-                logging.debug("6")
                 var1 = self.find_pos(modes[-1], self.pointer+1)
                 var2 = self.find_pos(modes[-2], self.pointer+2)
 
@@ -116,102 +107,83 @@ class Computer:
                 else:
                     self.pointer+= 3
             case 7:
-                logging.debug("7")
                 var1 = self.find_pos(modes[-1], self.pointer+1)
                 var2 = self.find_pos(modes[-2], self.pointer+2)
-                
+
                 pointer_val = self.find_pointer(modes[-3], self.pointer+3)
 
-                if pointer_val < 0:
-                    raise Exception("Attempted to write to negative index")
-                
                 self.mem[pointer_val] = int(var1 < var2)
 
                 self.pointer+= 4
-                pass
             case 8:
-                logging.debug("8")
                 var1 = self.find_pos(modes[-1], self.pointer+1)
                 var2 = self.find_pos(modes[-2], self.pointer+2)
-                
+
                 pointer_val = self.find_pointer(modes[-3], self.pointer+3)
 
-                if pointer_val < 0:
-                    raise Exception("Attempted to write to negative index")
-                
                 self.mem[pointer_val] = int(var1 == var2)
 
                 self.pointer+= 4
-                pass
             case 9:
-                logging.debug("9")
                 var1 = self.find_pos(modes[-1], self.pointer+1)
 
                 self.rel_base += var1
                 self.pointer+= 2
             case 99:
                 self.halted = True
-                pass
-            case _:
-                raise Exception("Attempted to run command that does not exist")
-            
+
         return None
 
+def read_input(root: str, run_type: Run = Run.TEST) -> list[str]:
+    """Function to read in input from test or input text file"""
+    if run_type == Run.TEST:
+        with open(os.path.join(root, "test.txt"), 'r', encoding="utf8") as f:
+            out: list[str] = [line.strip() for line in f.readlines()]
+    elif run_type == Run.REAL:
+        with open(os.path.join(root, "input.txt"), 'r', encoding="utf8") as f:
+            out: list[str] = [line.strip() for line in f.readlines()]
 
-class Directions:
-    UP: tuple[int, int] = (0, -1)
-    LEFT: tuple[int, int]  = (-1, 0)
-    RIGHT: tuple[int, int]  = (1, 0)
-    DOWN: tuple[int, int]  = (0, 1)
-
+    return out
 
 def main(root: str, run_type: Run = Run.TEST) -> int:
-    if run_type == Run.TEST:
-        with open(os.path.join(root, "test.txt"), 'r') as f:
-            inp: list[str] = [line.strip() for line in f.readlines()]
-    elif run_type == Run.REAL:
-        with open(os.path.join(root, "input.txt"), 'r') as f:
-            inp: list[str] = [line.strip() for line in f.readlines()]
-    else:
-        raise Exception("Error in getting run type")
+    """Function to run the solution"""
+    inp = read_input(root, run_type)
 
-    memory = {i: int(val) for (i, val) in enumerate(inp[0].split(","))}
-    IntcodeCom = Computer(memory)
+    intcode_com: IntCom = IntCom({i: int(val) for (i, val) in enumerate(inp[0].split(","))})
 
     grid: dict[int, dict[int, bool]] = {}
 
-    start = [0, 0]
-    grid[start[1]] = {}
-    grid[start[1]][start[0]] = 1
+    grid[0] = {}
+    grid[0][0] = True
 
-    cur_pos = start
-    cur_dir = Directions.UP
-    dir_order = [Directions.UP, Directions.RIGHT, Directions.DOWN, Directions.LEFT]
+    cur_pos = [0, 0]
+    cur_dir = (0, -1)
+    dir_order = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 
     coloured = []
 
-    while not IntcodeCom.halted:
-        next_instruction = IntcodeCom.run_step(grid[cur_pos[1]][cur_pos[0]])
-        while next_instruction is None and not IntcodeCom.halted:
-            next_instruction = IntcodeCom.run_step(grid[cur_pos[1]][cur_pos[0]])
-        
+    while not intcode_com.halted:
+        next_instruction = intcode_com.run_step(grid[cur_pos[1]][cur_pos[0]])
+        while next_instruction is None and not intcode_com.halted:
+            next_instruction = intcode_com.run_step(grid[cur_pos[1]][cur_pos[0]])
+
         colour = next_instruction
 
-        next_instruction = IntcodeCom.run_step(grid[cur_pos[1]][cur_pos[0]])
-        while next_instruction is None and not IntcodeCom.halted:
-            next_instruction = IntcodeCom.run_step(grid[cur_pos[1]][cur_pos[0]])
-        
-        if IntcodeCom.halted:
+        next_instruction = intcode_com.run_step(grid[cur_pos[1]][cur_pos[0]])
+        while next_instruction is None and not intcode_com.halted:
+            next_instruction = intcode_com.run_step(grid[cur_pos[1]][cur_pos[0]])
+
+        if intcode_com.halted:
             continue
-    
+
         turn = next_instruction
 
         if turn:
             cur_dir = dir_order[(dir_order.index(cur_dir)+1)%4]
         else:
             cur_dir = dir_order[(dir_order.index(cur_dir)-1)%4]
-        
-        grid[cur_pos[1]][cur_pos[0]] = colour
+
+        grid[cur_pos[1]][cur_pos[0]] = bool(colour)
 
         cur_pos[0] += cur_dir[0]
         cur_pos[1] += cur_dir[1]
@@ -220,52 +192,50 @@ def main(root: str, run_type: Run = Run.TEST) -> int:
             grid[cur_pos[1]] = {}
 
         if cur_pos[0] not in grid[cur_pos[1]]:
-            grid[cur_pos[1]][cur_pos[0]] = 0
+            grid[cur_pos[1]][cur_pos[0]] = False
 
         if cur_pos not in coloured:
             coloured.append(cur_pos.copy())
-        
-    min_y = min(grid)
-    max_y = max(grid)
-    min_x = min([min(x) for x in grid.values()])
-    max_x = max([max(x) for x in grid.values()])
 
-    vis_grid = [["." for _ in range(max_x-min_x+1)] for __ in range(max_y-min_y+1)]
+    y_span = [min(grid), max(grid)]
+    x_span = [min(min(x) for x in grid.values()), max(max(x) for x in grid.values())]
+
+    vis_grid = [["." for _ in range(x_span[1]-x_span[0]+1)] for __ in range(y_span[1]-y_span[0]+1)]
 
     for (y, x_vals) in grid.items():
         for (x, colour) in x_vals.items():
-            vis_grid[y-min_y][x-min_x] = ".#"[colour]
+            vis_grid[y-y_span[0]][x-y_span[0]] = ".#"[colour]
 
     logging.info('\n'.join([""]+["".join(line) for line in vis_grid]))
 
-    return None
+    return -1
 
 if __name__ == "__main__":
     # Import libraries
-    from aocd import submit
+    from aocd import _impartial_submit as submit
+    from urllib3 import BaseHTTPResponse
 
-    import bs4
     import sys
 
     # Get command line arguments
     arg_list: list[str] = [x.upper() for x in sys.argv]
 
     # Detect logging level wanted
-    loglevel = None
+    LOG_LEVEL = None
     for arg in arg_list:
         if "--log" in arg.lower():
-            loglevel = arg.removeprefix("--LOG=")
+            LOG_LEVEL = arg.removeprefix("--LOG=")
 
     # If none specified, assume base
-    if loglevel is None:
-        loglevel = "WARNING"
+    if LOG_LEVEL is None:
+        LOG_LEVEL = "WARNING"
 
     # Get logging level
-    numeric_level = getattr(logging, loglevel.upper(), None)
+    numeric_level = getattr(logging, LOG_LEVEL.upper(), None)
 
     # Check value is ccorrect
     if not isinstance(numeric_level, int):
-        raise ValueError(f"Invalid log level: {loglevel}")
+        raise ValueError(f"Invalid log level: {LOG_LEVEL}")
 
     # Set logging config
     logging.basicConfig(format='[%(levelname)s]: %(message)s', level=numeric_level)
@@ -275,54 +245,49 @@ if __name__ == "__main__":
 
     # Check whether user has input both
     if "-T" in first_two_chars and "-R" in arg_list:
-        raise Exception("Input either -T or -R, not both")
-    
+        raise ValueError("Input either -T or -R, not both")
+
     # Check which (if any user has input)
-    test_ans = None
+    TEST_ANS = None
     if "-R" in arg_list:
         # Set run type to real
-        run_type = Run.REAL
+        PROG_RUN_TYPE = Run.REAL
 
     elif "-T" in first_two_chars:
         # Test that user has put in a numeric value for the test answer
-        valid = False
+        VALID = False
         for elem in arg_list:
             if "-T" in elem and "=" in elem:
                 try:
-                    test_ans = int(elem.split("=")[1])
-                    valid = True
-                except ValueError:
-                    raise Exception("Enter a numeric value for test answer")
-        
+                    TEST_ANS = int(elem.split("=")[1])
+                    VALID = True
+                except ValueError as exc:
+                    raise ValueError("Enter a numeric value for test answer") from exc
+
         # Raise exception if user input wrong value
-        if not valid:
-            raise Exception("Argument -T takes input -T=<test_answer>")
-        
+        if not VALID:
+            raise ValueError("Argument -T takes input -T=<test_answer>")
+
         # Set run type to test
-        run_type = Run.TEST
+        PROG_RUN_TYPE = Run.TEST
     else:
         # If user has input neither raise exception
-        raise Exception("You need to input either -T or -R")
-    
+        raise ValueError("You need to input either -T or -R")
+
     # Run solution
-    answer = main(root, run_type)
+    ANSWER = main(ROOT_DIR, PROG_RUN_TYPE)
 
     # Test answer
-    if run_type == Run.REAL:
-        r = submit(answer, year=year, day=day)
+    if PROG_RUN_TYPE == Run.REAL:
+        r: BaseHTTPResponse | None = submit(ANSWER, year=year, day=day)
         if r is not None:
-            soup = bs4.BeautifulSoup(r.data, "html.parser")
-            message = soup.article.text
-            if "That's the right answer" in message:
+            if "That's the right answer" in str(r.data):
                 print("Yippee!")
-    
-    elif run_type == Run.TEST:
-        print(f"The answer is {test_ans}, you got {answer}.")
 
-        if (test_ans == answer):
-            print(f"You got it right! Time to submit!")
+    elif PROG_RUN_TYPE == Run.TEST:
+        print(f"The answer is {TEST_ANS}, you got {ANSWER}.")
+
+        if TEST_ANS == ANSWER:
+            print("You got it right! Time to submit!")
         else:
             print("Time to change ur code :(")
-        
-    else:
-        raise Exception("Somehow run_type was not test or real")
