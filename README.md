@@ -14,6 +14,7 @@ I use the advent-of-code-data library that is on pip. I have also made myself so
 
 - Solutions in other languages (Haskell, C, Rust)
 - Run-time tester
+- Time taken to solve from getting input (instad of 5 am)
 
 ## How to set up and run
 
@@ -33,4 +34,4 @@ On success a second file will be created called `solution2.py`, this has all you
 
 ### What to do if the copier fails
 
-When the copier fails, you can run it manually via the command `python copier/copier.py <year> <day>` and it will create the `solution2.py` by itself, note that if the file already exists you will have to delete it in order for it to create a new one.
+When the copier fails, you can run it manually via the command `python copier/copier.py -y=<year> -d=<day>` and it will create the `solution2.py` by itself, note that if the file already exists you will have to delete it in order for it to create a new one.
