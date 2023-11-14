@@ -215,7 +215,6 @@ def main(root: str, run_type: Run = Run.TEST) -> int:
 if __name__ == "__main__":
     # Import libraries
     from aocd import submit
-    from urllib3 import BaseHTTPResponse
 
     import sys
 
@@ -281,7 +280,7 @@ if __name__ == "__main__":
 
     # Test answer
     if prog_run_type == Run.REAL:
-        r: BaseHTTPResponse | None = submit(ANSWER, year=year, day=day)
+        r = submit(ANSWER, year=year, day=day)
         if r is not None:
             if "That's the right answer" in str(r.data):
                 print("Yippee!")

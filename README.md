@@ -8,7 +8,7 @@ I am attempted to complete the problems for 2019 through the days of November 20
 
 ## Helper code used
 
-I use the advent-of-code-data library that is on pip. I have also made myself some helper functions, these are `startDay.py` and `copier.py`. `startDay.py` gets the data from the website and creates an `input.txt` file for me to get the data and a pre-written starter piece of code that allows me to both test and submit my code. `copier.py` allows me to streamline the writing of my solution to the second part, whilst keeping my part 1 solution. It copies all the important sections of code from my first solution whilst removing the parts no longer necessary.
+I use the advent-of-code-data library that is on pip. I have also made myself some helper functions, these are `start_day.py` and `copier.py`. `start_day.py` gets the data from the website and creates an `input.txt` file for me to get the data and a pre-written starter piece of code that allows me to both test and submit my code. `copier.py` allows me to streamline the writing of my solution to the second part, whilst keeping my part 1 solution. It copies all the important sections of code from my first solution whilst removing the parts no longer necessary.
 
 ## Things I want to add
 
@@ -24,7 +24,7 @@ Clone the repository then install the advent-of-code-data library via pip, using
 
 ### Starting a day
 
-Run the command `python startDay.py -y=<year> -d=<day>`, where year and day will default to the current day/year if not inputted. This will then create the corresponding folder and files to solve the days problem. It will also make a copy of the input in `input.txt` and create a blank `test.txt` file to input test data into.
+Run the command `python start_day.py -y=<year> -d=<day>`, where year and day will default to the current day/year if not inputted. This will then create the corresponding folder and files to solve the days problem. It will also make a copy of the input in `input.txt` and create a blank `test.txt` file to input test data into.
 
 ### Running code
 
