@@ -68,6 +68,10 @@ if not os.path.exists(os.path.join(root, str(year), f"day{cur_day}")):
     # Make directory
     os.makedirs(f"{year}/day{cur_day}")
 
+    # Make directory for 2023 (25 languages challenge)
+    if year == 2023:
+        os.makedirs(f"{year}/day{cur_day}/varied_solution")
+
     # Get input
     with open(f"{year}/day{cur_day}/input.txt", 'w', encoding="utf8") as f:
         content = get_data(year=year, day=cur_day)
