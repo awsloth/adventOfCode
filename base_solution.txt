@@ -14,12 +14,10 @@ def read_input(root: str, run_type: Run = Run.TEST) -> list[str]:
     """Function to read in input from test or input text file"""
     if run_type == Run.TEST:
         with open(os.path.join(root, "test.txt"), 'r', encoding="utf8") as f:
-            out: list[str] = [line.strip() for line in f.readlines()]
+            return [line.strip() for line in f.readlines()]
     elif run_type == Run.REAL:
         with open(os.path.join(root, "input.txt"), 'r', encoding="utf8") as f:
-            out: list[str] = [line.strip() for line in f.readlines()]
-
-    return out
+            return [line.strip() for line in f.readlines()]
 
 def main(root: str, run_type: Run = Run.TEST) -> int:
     """Function to run the solution"""

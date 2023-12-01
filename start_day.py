@@ -57,6 +57,7 @@ else:
 
 # Set year
 year = now.year
+day = now.day
 
 # Set root directory
 root = os.getcwd()
