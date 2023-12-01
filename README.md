@@ -4,7 +4,10 @@ A list of all my solutions to advent of code through the years. The first year I
 
 ## Current Progress
 
-I am attempted to complete the problems for 2019 through the days of November 2023 before the actual 2023 event.
+I aim to complete AoC 2023 by using a different language each day!
+The current list is as follows:
+1. Rockstar (https://codewithrockstar.com/)
+3. ...
 
 ## Helper code used
 
