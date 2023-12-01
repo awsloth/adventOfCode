@@ -1,4 +1,4 @@
-"""Module to solve part 1 of advent of code $year$-$day$"""
+"""Module to solve part 1 of advent of code 2023-1"""
 from enum import Enum
 import os
 import logging
