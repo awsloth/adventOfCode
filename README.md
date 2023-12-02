@@ -7,6 +7,7 @@ A list of all my solutions to advent of code through the years. The first year I
 I aim to complete AoC 2023 by using a different language each day!
 The current list is as follows:
 1. Rockstar (https://codewithrockstar.com/)
+2. Scratch (https://scratch.mit.edu/)
 3. ...
 
 ## Helper code used
