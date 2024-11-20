@@ -7,3 +7,5 @@ aocVenv
 .vscode
 .mypy_cache
 test
+data.txt
+data.lean
