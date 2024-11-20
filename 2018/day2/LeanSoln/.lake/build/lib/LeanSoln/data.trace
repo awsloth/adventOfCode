@@ -1,0 +1,5 @@
+{"log":
+ [{"message":
+   ".> LEAN_PATH=././.lake/build/lib LD_LIBRARY_PATH=././.lake/build/lib:/home/anna/.elan/toolchains/leanprover--lean4---stable/lib/lean:/home/anna/.elan/toolchains/leanprover--lean4---stable/lib /home/anna/.elan/toolchains/leanprover--lean4---stable/bin/lean ././././LeanSoln/data.lean -R ./././. -o ././.lake/build/lib/LeanSoln/data.olean -i ././.lake/build/lib/LeanSoln/data.ilean -c ././.lake/build/ir/LeanSoln/data.c --json",
+   "level": "trace"}],
+ "depHash": "613308348379744276"}

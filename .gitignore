@@ -6,3 +6,4 @@ aocVenv
 .venv
 .vscode
 .mypy_cache
+test

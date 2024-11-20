@@ -1,0 +1,1 @@
+{"version":3,"references":{"{\"c\":{\"n\":\"data\",\"m\":\"LeanSoln.data\"}}":{"usages":[],"definition":[0,4,0,8]},"{\"c\":{\"n\":\"String\",\"m\":\"Init.Prelude\"}}":{"usages":[[0,11,0,17,"data",0,0,249,27,0,4,0,8]],"definition":null}},"module":"LeanSoln.data"}
