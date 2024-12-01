@@ -72,30 +72,30 @@ if not os.path.exists(os.path.join(root, str(year), f"day{cur_day}")):
     if year == 2023:
         os.makedirs(f"{year}/day{cur_day}/varied_solution")
 
-    # Get input
-    with open(f"{year}/day{cur_day}/input.txt", 'w', encoding="utf8") as f:
-        content = get_data(year=year, day=cur_day)
-        f.write(content)
+# Get input
+with open(f"{year}/day{cur_day}/input.txt", 'w', encoding="utf8") as f:
+    content = get_data(year=year, day=cur_day)
+    f.write(content)
 
-    with open(f"{year}/day{cur_day}/test.txt", 'w', encoding="utf8") as f:
-        pass
+with open(f"{year}/day{cur_day}/test.txt", 'w', encoding="utf8") as f:
+    pass
 
-    # Phrases to replace
-    phrase_replace = {"$year$":str(year), "$day$":str(cur_day)}
+# Phrases to replace
+phrase_replace = {"$year$":str(year), "$day$":str(cur_day)}
 
-    # Open base solution
-    with open("base_solution.txt", "r", encoding="utf8") as s:
+# Open base solution
+with open("base_solution.txt", "r", encoding="utf8") as s:
 
-        # Open solution program
-        with open(f"{year}/day{cur_day}/solution.py", 'w', encoding="utf8") as f:
+    # Open solution program
+    with open(f"{year}/day{cur_day}/solution.py", 'w', encoding="utf8") as f:
 
-            # For line in base solution, copy into solution program
-            # replacing keyphrases
-            for line in s.readlines():
-                new_line = line
-                for (key, value) in phrase_replace.items():
-                    if key in new_line:
-                        x = new_line.find(key)
-                        new_line = new_line[:x] + value + new_line[x+len(key):]
+        # For line in base solution, copy into solution program
+        # replacing keyphrases
+        for line in s.readlines():
+            new_line = line
+            for (key, value) in phrase_replace.items():
+                if key in new_line:
+                    x = new_line.find(key)
+                    new_line = new_line[:x] + value + new_line[x+len(key):]
 
-                f.write(new_line)
+            f.write(new_line)

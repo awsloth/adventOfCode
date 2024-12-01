@@ -9,3 +9,4 @@ aocVenv
 test
 data.txt
 data.lean
+.lake
