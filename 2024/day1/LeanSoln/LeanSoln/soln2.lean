@@ -1,4 +1,5 @@
 import LeanSoln.data
+import Mathlib.Order.Defs.PartialOrder
 
 def insert : Int → List Int → List Int
   | x , [] => [x]
@@ -32,6 +33,14 @@ def sortedLists : Prod (List Int) (List Int) := let xs := intLists ; (listSort x
 def countHelper : Int → Int → List Int → (Prod Int Int) × (List Int)
   | num, count, [] => ((num, count), [])
   | num, count, (x :: xs) => if (x == num) then (countHelper num (count + 1) xs) else ((num, count), (x :: xs))
+
+theorem countNilIsZero (x : Int) : (countHelper x 1 []).snd.length = 0 := by rfl
+
+theorem helper_lemma (x : Int) (xs : List Int) : (countHelper x 1 xs).snd.length ≤ xs.length := by
+  induction xs with
+  | nil => apply Nat.le_of_eq (countNilIsZero x)
+  | cons y ys => 
+
 
 -- Prod Int Int is (number, count)
 def toCount : List Int → List (Prod Int Int)

@@ -1,10 +1,15 @@
 name = "LeanSoln"
 version = "0.1.0"
-defaultTargets = ["leansoln"]
+keywords = ["math"]
+defaultTargets = ["LeanSoln"]
+
+[leanOptions]
+pp.unicode.fun = true # pretty-prints `fun a ↦ b`
+autoImplicit = false
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
 
 [[lean_lib]]
 name = "LeanSoln"
-
-[[lean_exe]]
-name = "leansoln"
-root = "Main"
