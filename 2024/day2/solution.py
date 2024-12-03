@@ -23,7 +23,17 @@ def main(root: str, run_type: Run = Run.TEST) -> int:
     """Function to run the solution"""
     inp = read_input(root, run_type)
 
-    return -1
+    total = 0
+    for line in inp:
+        seq = [*map(int, line.split(" "))]
+        diffs = [y - x for (x, y) in zip(seq, seq[1:])]
+
+        if 1 <= min(diffs) and max(diffs) <= 3:
+            total += 1
+        if -3 <= min(diffs) and max(diffs) <= -1:
+            total += 1
+
+    return total
 
 if __name__ == "__main__":
     # Import libraries

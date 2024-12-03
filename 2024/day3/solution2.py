@@ -1,4 +1,4 @@
-"""Module to solve part 1 of advent of code 2024-3"""
+"""Module to solve part 2 of advent of code 2024-3"""
 from enum import Enum
 import os
 import logging
@@ -37,7 +37,6 @@ def main(root: str, run_type: Run = Run.TEST) -> int:
         yint = int(y[:-1])
         total += xint * yint
 
-
     return total
 
 if __name__ == "__main__":
@@ -46,7 +45,6 @@ if __name__ == "__main__":
     from urllib3 import BaseHTTPResponse
 
     import sys
-    import copier
 
     # Get command line arguments
     arg_list: list[str] = [x.upper() for x in sys.argv]
@@ -113,7 +111,7 @@ if __name__ == "__main__":
         r: BaseHTTPResponse | None = submit(ANSWER, year=year, day=day)
         if r is not None:
             if "That\\'s the right answer" in str(r.data):
-                copier.make_next(year, day)
+                print("Yippee!")
 
     elif prog_run_type == Run.TEST:
         print(f"The answer is {test_ans}, you got {ANSWER}.")

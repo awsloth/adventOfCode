@@ -1,11 +1,10 @@
-"""Module to solve part 1 of advent of code 2024-3"""
+"""Module to solve part 2 of advent of code 2024-2"""
 from enum import Enum
 import os
 import logging
-year, day = [2024, 3]
+year, day = [2024, 2]
 ROOT_DIR: str = os.path.join(os.getcwd(), str(year), f"day{day}")
 
-import re
 
 class Run(Enum):
     """Enum for program run type"""
@@ -21,22 +20,32 @@ def read_input(root: str, run_type: Run = Run.TEST) -> list[str]:
         with open(os.path.join(root, "input.txt"), 'r', encoding="utf8") as f:
             return [line.strip() for line in f.readlines()]
 
+def validRun(xs : list[int]) -> bool:
+    return (1 <= min(xs) and max(xs) <= 3) or (-3 <= min(xs) and max(xs) <= -1)
+
+def direct(x : int, y: int) -> int:
+    return (y - x) // abs(y - x)
+
 def main(root: str, run_type: Run = Run.TEST) -> int:
     """Function to run the solution"""
     inp = read_input(root, run_type)
 
-    inp = "".join(inp)
-
-    cases = re.findall("mul\\(\\d{1,3},\\d{1,3}\\)", inp)
-
     total = 0
+    for line in inp:
+        seq = [*map(int, line.split(" "))]
 
-    for case in cases:
-        x, y = case.split(",")
-        xint = int(x[4:])
-        yint = int(y[:-1])
-        total += xint * yint
+        diffs = [y - x for (x, y) in zip(seq, seq[1:])]
 
+        if validRun(diffs):
+            total += 1
+            continue
+
+        lists = [seq[:i] + seq[i+1:] for i in range(len(seq) + 1)]
+
+        poss = [[y - x for (x, y) in zip(xs, xs[1:])] for xs in lists]
+
+        if any([*map(validRun, poss)]):
+            total += 1
 
     return total
 
@@ -46,7 +55,6 @@ if __name__ == "__main__":
     from urllib3 import BaseHTTPResponse
 
     import sys
-    import copier
 
     # Get command line arguments
     arg_list: list[str] = [x.upper() for x in sys.argv]
@@ -113,7 +121,7 @@ if __name__ == "__main__":
         r: BaseHTTPResponse | None = submit(ANSWER, year=year, day=day)
         if r is not None:
             if "That\\'s the right answer" in str(r.data):
-                copier.make_next(year, day)
+                print("Yippee!")
 
     elif prog_run_type == Run.TEST:
         print(f"The answer is {test_ans}, you got {ANSWER}.")
