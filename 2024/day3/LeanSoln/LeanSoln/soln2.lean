@@ -6,9 +6,7 @@ def singleLine : String := List.foldl (λ x ↦ (λ y ↦ x ++ y)) "" (data.spli
 def filterRight : List String → List String := List.map (λ x ↦ (List.takeWhile (λ y ↦ y ≠ ')') x.data).asString)
 
 -- Cut down based on size (9 total for biggest possible)
-def filterLength : List String → List String := List.filter (λ x ↦ x.length ≤ 8)
-
-def removeBlanks : List String → List String := List.filter (λ x ↦ x ≠ "")
+def filterLengthRemoveBlank : List String → List String := List.filter (λ x ↦ (Bool.and (x.length ≤ 8) (x ≠ "")))
 
 -- Cut down left bracket
 def filterLeft (xs : List String) : List String := List.map (λ x ↦ x.data.tail.asString) (List.filter (λ x ↦ x.data.head! = '(') xs)
@@ -102,7 +100,7 @@ def dontcommands : List String := List.map (λ x ↦ (x.splitOn "don't()").head!
 
 def allCommands : List String := filterOns ++ dontcommands
 
-#eval sumProd $ toNums $ validNums $ filterComma $ splitOnComma $ filterLeft $ removeBlanks $ filterLength $ filterRight $ allCommands 
+#eval sumProd $ toNums $ validNums $ filterComma $ splitOnComma $ filterLeft $ filterLengthRemoveBlank $ filterRight $ allCommands 
 
 -- 77152269 (too big)
 -- 72847295 (no comment)

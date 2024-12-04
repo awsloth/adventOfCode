@@ -1,0 +1,10 @@
+name = "LeanSoln"
+version = "0.1.0"
+defaultTargets = ["leansoln"]
+
+[[lean_lib]]
+name = "LeanSoln"
+
+[[lean_exe]]
+name = "leansoln"
+root = "Main"
