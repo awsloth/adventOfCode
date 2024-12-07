@@ -34,18 +34,30 @@ def countHelper : Int → Int → List Int → (Prod Int Int) × (List Int)
   | num, count, [] => ((num, count), [])
   | num, count, (x :: xs) => if (x == num) then (countHelper num (count + 1) xs) else ((num, count), (x :: xs))
 
-theorem countNilIsZero (x : Int) : (countHelper x 1 []).snd.length = 0 := by rfl
-
-theorem helper_lemma (x : Int) (xs : List Int) : (countHelper x 1 xs).snd.length ≤ xs.length := by
-  induction xs with
-  | nil => apply Nat.le_of_eq (countNilIsZero x)
-  | cons y ys => 
-
+theorem countHelp (n : Int) (x : Int) (xs : List Int) : sizeOf (countHelper x n xs).snd <  1 + sizeOf x + sizeOf xs := by
+  match xs with
+    | [] => simp[countHelper]
+            simp[Nat.add_comm 1 (sizeOf x)]
+    | (y :: ys) => unfold countHelper
+                   split
+                   case isTrue => simp[Nat.add_comm 1 (sizeOf y)]
+                                  simp[Nat.add_assoc 1]
+                                  simp[← Nat.add_assoc (sizeOf x) (sizeOf y + 1) (sizeOf ys)]
+                                  simp[Nat.add_comm (sizeOf x)]
+                                  simp[Nat.add_assoc]
+                                  simp[← Nat.add_assoc]
+                                  simp[Nat.add_assoc ((1 + sizeOf y) + 1) (sizeOf x)]
+                                  simp[Nat.add_assoc (1 + sizeOf y)]
+                                  simp[← Nat.add_assoc 1]
+                                  simp[Nat.lt_add_left (1 + sizeOf y) (countHelp (n+1) x ys)]
+                   case isFalse => simp[Nat.add_comm 1]
 
 -- Prod Int Int is (number, count)
 def toCount : List Int → List (Prod Int Int)
   | [] => []
   | (x :: xs) => let help := (countHelper x 1 xs) ; help.fst :: (toCount help.snd)
+decreasing_by
+  simp[countHelp]
 
 def listCounts : Prod (List (Prod Int Int)) (List (Prod Int Int)) := let xs := sortedLists ; (toCount xs.fst, toCount xs.snd)
 
@@ -56,4 +68,4 @@ def soln : Prod (List (Prod Int Int)) (List (Prod Int Int)) → Int
   | (((x, xcount) :: xs), ((y, ycount) :: ys)) => if (x == y) then (soln (xs, ys)) + (x * xcount * ycount) else (if (x > y) then (soln (((x, xcount) :: xs), ys)) else (soln (xs, ((y, ycount) :: ys))))
 
 
-#eval! soln listCounts
+#eval soln listCounts
