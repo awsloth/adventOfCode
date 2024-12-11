@@ -30,5 +30,3 @@ def validWalks : Nat → List (List Nat) → Nat × Nat → List (Nat × Nat)
 def locateHeads (grid : List (List Nat)) : List (Nat × Nat) := List.map (λ ((x, _), y) ↦ (x, y)) (List.filter (λ ((_, d), _) ↦ d == 0) (List.map (λ (y, xs) ↦ List.map (λ xd ↦ (xd, y)) (List.enum xs)) (List.enum grid)).flatten)
 
 def answer (grid : List (List Nat)) : Nat := List.sum (List.map (λ start ↦ (validWalks 9 grid start).length) (locateHeads grid))
-
-#eval answer $ formGrid data

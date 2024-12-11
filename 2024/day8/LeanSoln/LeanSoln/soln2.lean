@@ -28,7 +28,7 @@ theorem dropWhileL (c : Char) (xs : List (Nat × Nat × Char)) : sizeOf (List.dr
                                     simp[← Nat.add_comm (sizeOf ys)]
                                     simp[← Nat.add_assoc]
                                     simp[Nat.add_assoc (1 + sizeOf ys)]
-                                    simp[Nat.lt_add_right (2 + x + 1 + y + c1.toNat + 3) (dropWhileL c ys)]
+                                    apply (Nat.lt_add_right (2 + x + 1 + y + c1.toNat + 3) (dropWhileL c ys))
                           | false => simp
 
 def groupItems : List (Nat × Nat × Char) → List (Char × (List (Nat × Nat)))
@@ -36,9 +36,12 @@ def groupItems : List (Nat × Nat × Char) → List (Char × (List (Nat × Nat))
   | ((x, y, c) :: xs) => [(c, (x, y) :: (List.map (λ (x, y, _) ↦ (x, y)) (List.takeWhile (λ (_, _, c1) ↦ c == c1) xs)))] ++ (groupItems (List.dropWhile (λ (_, _, c1) ↦ c == c1) xs))
 decreasing_by
   simp
-  simp[Nat.add_comm 1]
-  simp[Nat.add_assoc (x + 1 + (y + 1 + (c.toNat + 3))) 1]
-  simp[Nat.lt_add_left (x + 1 + (y + 1 + (c.toNat + 3))) (dropWhileL c xs)]
+  apply Nat.lt_trans _ _
+  apply 1 + (sizeOf xs)
+  apply (dropWhileL c xs)
+  apply Nat.add_lt_add_right
+  apply Nat.lt_add_of_pos_right
+  apply Nat.add_one_pos
 
 def List.pairs {α : Type} : List α → List (α × α)
   | [] => []
