@@ -49,5 +49,3 @@ def solveEquations : List (Vec × Vec × Vec) → List (Bool × Vec) := List.map
 def List.sum : List Int → Int := List.foldl (λ s ↦ (λ n ↦ s + n)) 0
 
 def answer (str : String) : Int := List.sum $ List.map (λ (solved, (a, b)) ↦ if solved then 3 * a + b else 0) (solveEquations $ vectorEquations str)
-
-#eval answer data
