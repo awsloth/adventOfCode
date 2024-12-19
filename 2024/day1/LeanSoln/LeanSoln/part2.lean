@@ -1,6 +1,6 @@
 import LeanSoln.data
-import Mathlib.Order.Defs.PartialOrder
 
+namespace part2
 def insert : Int → List Int → List Int
   | x , [] => [x]
   | x , (y :: ys) => if (x < y) then x :: (y :: ys) else y :: (insert x ys)
@@ -69,3 +69,4 @@ def soln : Prod (List (Prod Int Int)) (List (Prod Int Int)) → Int
 
 
 #eval soln listCounts
+end part2

@@ -1,6 +1,4 @@
-import LeanSoln.part2
+import LeanSoln.part1
 
 def main : IO Unit :=
-  do 
-  let x ← first'
-  pure ()
+  IO.println "hello"
