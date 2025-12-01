@@ -1,21 +1,34 @@
--- >>> main
--- 5978
+import Control.Monad.State
 
 main :: IO Integer
 main = do
        x <- readFile "input.txt"
-       pure (snd . soln . reverse $ lines x)
+       pure (evalState (part2 $ lines x) 50)
 
-soln :: [String] -> (Integer , Integer)
-soln [] = (50 , 0)
-soln (('L' : a) : xs) = let (x, y) = soln xs in
-                         let x' = (x - (read a :: Integer)) `mod` 100 in
-                          if x - (read a :: Integer) > 0
-                             then (x', y)
-                             else (x', if x == 0 then y + ((read a :: Integer) - x) `div` 100 else y + 1 + ((read a :: Integer) - x) `div` 100)
-soln (('R' : a) : xs) = let (x, y) = soln xs in
-                         let x' = (x + (read a :: Integer)) `mod` 100 in
-                          if x + (read a :: Integer) < 100
-                             then (x', y)
-                             else (x', y + 1 + ((read a :: Integer) - (100 - x)) `div` 100)
+changeState :: String -> Integer -> Integer
+changeState ('L' : a) x = (x - (read a :: Integer)) `mod` 100
+changeState ('R' : a) x = (x + (read a :: Integer)) `mod` 100
 
+part1 :: [String] -> State Integer Integer
+part1 [] = pure 0
+part1 (c : xs) = do
+                 modify (changeState c)
+                 x <- get
+                 y <- part1 xs
+                 if x == 0
+                   then pure (y + 1)
+                   else pure y
+
+throughZero :: String -> Integer -> Integer
+throughZero ('L' : a) x = let (d, m) = divMod (read a :: Integer) 100 in
+                           d + (if (x - m) > 0 || x == 0 then 0 else 1)
+throughZero ('R' : a) x = let (d, m) = divMod (read a :: Integer) 100 in
+                           d + (if (x + m) > 99 then 1 else 0)
+
+part2 :: [String] -> State Integer Integer
+part2 [] = pure 0
+part2 (c : xs) = do
+                 x <- get
+                 modify (changeState c)
+                 y <- part2 xs
+                 pure (y + throughZero c x)
